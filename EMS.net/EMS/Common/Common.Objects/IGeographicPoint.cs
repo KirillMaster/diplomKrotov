@@ -1,0 +1,15 @@
+﻿namespace Common.Objects
+{
+    public interface IGeographicPoint
+    {
+        /// <summary>
+        /// Широта
+        /// </summary>
+        double Latitude { get; set; }
+
+        /// <summary>
+        /// Долгота
+        /// </summary>
+        double Longitude { get; set; }
+    }
+}
