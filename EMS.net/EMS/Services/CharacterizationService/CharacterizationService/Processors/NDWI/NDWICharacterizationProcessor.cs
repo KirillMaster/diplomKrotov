@@ -11,6 +11,7 @@ using Common.Objects.Landsat;
 using Common.PointsReaders;
 using DeterminingPhenomenonService.Helpers;
 using DeterminingPhenomenonService.Objects;
+using DrawImageLibrary;
 using Topshelf.Logging;
 
 namespace CharacterizationService.Processors.NDWI
@@ -35,7 +36,7 @@ namespace CharacterizationService.Processors.NDWI
             CalculateNDWI(landsatDecription.Channel5.Normalized, landsatDecription.Channel6.Normalized,
                 cuttedImageInfo, resultFolder);
 
-            return new[] {"info"};
+            return new[] { resultFolder  + "ndwi_karpati_2016.png" };
         }
 
         public void CalculateNDWI(string channel5, string channel6, CuttedImageInfo cuttedImageInfo, string resultFolder)
@@ -58,7 +59,7 @@ namespace CharacterizationService.Processors.NDWI
             var legend = new Legend(ndwiRanges.ToArray());
             var nirBuffer = ClipImageHelper.ReadBufferByIndexes(cuttedImageInfo, nirChannel);
             var swirBuffer = ClipImageHelper.ReadBufferByIndexes(cuttedImageInfo, swirChannel);
-            using (var bmp = new Bitmap(cuttedImageInfo.Width, cuttedImageInfo.Height))
+            using (var bmp = DrawLib.CreateImageWithLegend(cuttedImageInfo.Width, cuttedImageInfo.Height, @"..\..\Content\NDWI.png"))
             {
                 for (var row = 0; row < cuttedImageInfo.Height; row++)
                 {
@@ -74,7 +75,6 @@ namespace CharacterizationService.Processors.NDWI
                 }
 
                 bmp.Save(resultFolder + "ndwi_karpati_2016.png");
-                legend.GetLegend().Save(resultFolder + "legend_ndwi_karpati_2016.png");
             }
         }
 

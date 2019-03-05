@@ -23,7 +23,7 @@ namespace CharacterizationServiceStub
                         SatelliteType = SatelliteType.Landsat8,
                         DataFolder = @"C:\diplom\EMS.nodejs\external\sortDownloadData\Landsat_8_C1\2018-05-12\185026",
                         ResultFolder = @"C:\diplom\",
-                        CharacteristicType = CharacteristicType.Temperature
+                        CharacteristicType = CharacteristicType.NDWI
                     }
                 },
                 LeftUpper = new

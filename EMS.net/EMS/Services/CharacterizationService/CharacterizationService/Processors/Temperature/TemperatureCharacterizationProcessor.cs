@@ -11,6 +11,7 @@ using Common.Objects;
 using Common.Objects.Landsat;
 using DeterminingPhenomenonService.Helpers;
 using DeterminingPhenomenonService.Objects;
+using DrawImageLibrary;
 using OSGeo.GDAL;
 using Topshelf.Logging;
 
@@ -25,10 +26,9 @@ namespace CharacterizationService.Processors.Temperature
         public override string[] Process(IGeographicPoint leftUpper, IGeographicPoint rigthLower, string dataFolder,
             string resultFolder)
         {
-            //@"C:\Users\User\Downloads\Карпаты2\185026_20160826\");
             var folderDescription = new LandsatDataDescription(dataFolder);
 
-            var path = folderDescription; //@"C:\Users\User\Downloads\Карпаты2\185026_20160826\";
+            var path = folderDescription; 
             LandsatMetadata metadataFile = JsonHelper.Deserialize<LandsatMetadata>(folderDescription.MetadataMtlJson);
             TirsThermalConstants thermalConstants = metadataFile.L1MetadataFile.TirsThermalConstants;
             var cuttedImageInfo =
@@ -88,15 +88,15 @@ namespace CharacterizationService.Processors.Temperature
             };
             using (band)
             {
-                var width = cuttedImageInfo.Width;//band.XSize;
-                var heigth = cuttedImageInfo.Height;//band.YSize;
+                var width = cuttedImageInfo.Width;
+                var heigth = cuttedImageInfo.Height;
                 var legend = new Legend(5, 45, 5, Color.Yellow, Color.Red);
                 double max = -100000;
                 double min = 100000;
-                legend.GetLegend().Save(resultFolder + "legend.png");
 
 
-                using (var bmp = new Bitmap(width, heigth))
+
+                using (var bmp = DrawLib.CreateImageWithLegend(cuttedImageInfo.Width, cuttedImageInfo.Height, @"..\..\Content\temperature.png"))
                 {
                     for (var row = 0; row < heigth; row++)
                     {
@@ -128,7 +128,6 @@ namespace CharacterizationService.Processors.Temperature
                     }
 
                     bmp.Save(resultFilename);
-                    legend.GetLegend().Save(resultFolder + "legent_2016_karpati.png");
                 }
             }
         }
