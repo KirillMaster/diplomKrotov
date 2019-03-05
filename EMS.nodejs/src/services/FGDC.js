@@ -128,4 +128,4 @@ module.exports = {
     parseWithJSON
 };
 
-// parseWithJSON('C:\\Users\\User\\Downloads\\Карпаты2\\186026_20170804','LC08_L1TP_186026_20170804_20170812_01_T1_MTL.txt');
+parseWithJSON('C:\\diplom\\EMS.nodejs\\external\\sortDownloadData\\Landsat_8_C1\\2016-05-06\\185026','LC08_L1TP_185026_20160506_20170325_01_T1_MTL.txt');

@@ -95,15 +95,16 @@ namespace DataNormalizationService
                 imageAttributes.SunElevation, imageAttributes.EarthSunDistance,
                 minMaxRadiance.RadianceMaximumBand7, minMaxReflectance.ReflectanceMaximumBand7);
 
-            //processor.Normalization(folderDescription.Channel8.Raw, normalizationDataFolder,
-            //    radiometricRescaling.RadianceMultBand8, radiometricRescaling.RadianceAddBand8,
-            //    imageAttributes.SunElevation, imageAttributes.EarthSunDistance,
-            //    minMaxRadiance.RadianceMaximumBand8, minMaxReflectance.ReflectanceMaximumBand8);
+            processor.Normalization(folderDescription.Channel8.Raw, normalizationDataFolder,
+                radiometricRescaling.RadianceMultBand8, radiometricRescaling.RadianceAddBand8,
+                imageAttributes.SunElevation, imageAttributes.EarthSunDistance,
+                minMaxRadiance.RadianceMaximumBand8, minMaxReflectance.ReflectanceMaximumBand8);
 
             processor.Normalization(folderDescription.Channel9.Raw, normalizationDataFolder,
                 radiometricRescaling.RadianceMultBand9, radiometricRescaling.RadianceAddBand9,
                 imageAttributes.SunElevation, imageAttributes.EarthSunDistance,
                 minMaxRadiance.RadianceMaximumBand9, minMaxReflectance.ReflectanceMaximumBand9);
+
 
             #endregion
 

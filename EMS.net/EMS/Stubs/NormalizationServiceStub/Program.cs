@@ -14,7 +14,7 @@ namespace NormalizationServiceStub
             var message = new 
             {
                 RequestId = Guid.NewGuid().ToString("N"),
-                Folder = @"F:\КАРПАТЫV2\185026_20150824",
+                Folder = @"C:\diplom\EMS.nodejs\external\sortDownloadData\Landsat_8_C1\2016-05-06\185026",
                 SatelliteType = SatelliteType.Landsat8
             };
 

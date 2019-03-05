@@ -34,7 +34,10 @@ module.exports = {
                     //         remaining: 81.403       // The remaining seconds to finish (3 decimals)
                     //     }
                     // }
-                    console.log(`${nameFile} progress: `, state.percent);
+                    console.log(`${nameFile} progress: `, state.percent
+                                , `speed(bytes/sec):`, state.speed
+                                , `time(elapsed seconds):`, state.time.elapsed
+                                , `time(remaining seconds)`, state.time.remaining);
                     if(typeof cbProgress === 'function'){
                         cbProgress(state);
                     }

@@ -205,7 +205,8 @@ async function handleResearch(research, startData, endData, countYears = 2, coor
         await researchController.setStatus(researchRes.id, STATE.FIND_PHENOMENON.code);
 
         const pathPhenomenon = `${userDir}\\phenomenon`;
-        const getPhenomenonResult = await amqp.getPhenomenon({
+
+        var message = {
             resultFolder: pathPhenomenon,
             leftUpper: {
                 latitude: coord[2],
@@ -217,7 +218,9 @@ async function handleResearch(research, startData, endData, countYears = 2, coor
             },
             phenomenon: RESEARCHES[research].type,
             dataFolders: arrayLandsat
-        });
+        };
+
+        const getPhenomenonResult = await amqp.getPhenomenon(message);
 
 
         if(!getPhenomenonResult.isDetermined){
@@ -234,10 +237,9 @@ async function handleResearch(research, startData, endData, countYears = 2, coor
 
         characteristics.forEach( async characteristicName => {
             const satellite = CHARACTERISTICS[characteristicName].satellite;
-
+            needSatellitesForCharacteristics[satellite] = '';
             // Создадим папки для хар-к
             await createCharacteristicFolder(userDir, CHARACTERISTICS[characteristicName].folder);
-            needSatellitesForCharacteristics[satellite] = '';
         });
         // Скачаем данные для каждого спутника
         const needSatellites = Object.keys(needSatellitesForCharacteristics);
@@ -268,8 +270,16 @@ async function handleResearch(research, startData, endData, countYears = 2, coor
 
 
         await researchController.setStatus(researchRes.id, STATE.FIND_CHARACTERISTICS.code);
-        const characteristicsResult = await amqp.getCharacteristics({
-            phenomenonType: RESEARCHES[research].type,
+        var message = {
+            // phenomenonType: RESEARCHES[research].type,
+            leftUpper: {
+                latitude: coord[2],
+                Longitude: coord[1]
+            },
+            rightLower: {
+                latitude: coord[0],
+                longitude: coord[3]
+            },
             characteristics: characteristics.map(character => {
                 const ch = CHARACTERISTICS[character];
                 const sat = ch.satellite;
@@ -284,16 +294,9 @@ async function handleResearch(research, startData, endData, countYears = 2, coor
                     resultFolder: `${userDir}\\characteristics\\${ch.folder}`,
                     characteristicType: ch.type
                 }
-            }),
-            leftUpper: {
-                latitude: coord[2],
-                Longitude: coord[1]
-            },
-            rightLower: {
-                latitude: coord[0],
-                longitude: coord[3]
-            }
-        });
+            })
+        };
+        const characteristicsResult = await amqp.getCharacteristics(message);
 
         console.log(characteristicsResult);
         await researchController.setStatus(researchRes.id, STATE.COMPLETED.code);

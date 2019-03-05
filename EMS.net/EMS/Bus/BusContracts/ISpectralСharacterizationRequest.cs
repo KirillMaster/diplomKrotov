@@ -4,17 +4,12 @@ using Common.Objects;
 
 namespace BusContracts
 {
-    public interface IСharacterizationRequest
+    public interface ISpectralСharacterizationRequest
     {
         /// <summary>
         /// Идентификатор запроса
         /// </summary>
         string RequestId { get; set; }
-
-        /// <summary>
-        /// Тип явления
-        /// </summary>
-        PhenomenonType PhenomenonType { get; set; }
 
         /// <summary>
         /// Характеристики и условия распространения 
@@ -29,6 +24,6 @@ namespace BusContracts
         /// <summary>
         /// Нижний правый угол полигона
         /// </summary>
-        IGeographicPoint RigthLower { get; set; }
+        IGeographicPoint RightLower { get; set; }
     }
 }

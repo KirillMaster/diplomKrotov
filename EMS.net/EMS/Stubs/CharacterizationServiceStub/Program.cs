@@ -21,24 +21,24 @@ namespace CharacterizationServiceStub
                     new
                     {
                         SatelliteType = SatelliteType.Landsat8,
-                        DataFolder = @"C:\Users\User\Downloads\Карпаты2\resultKarpati2015-2016",
-                        ResultFolder = @"C:\Users\User\Downloads\Карпаты2\resultKarpati2015-2016\Characteristics",
-                        CharacteristicType = CharacteristicType.AreaOfDamage
+                        DataFolder = @"C:\diplom\EMS.nodejs\external\sortDownloadData\Landsat_8_C1\2018-05-12\185026",
+                        ResultFolder = @"C:\diplom\",
+                        CharacteristicType = CharacteristicType.NDWI
                     }
                 },
                 LeftUpper = new
                 {
-                    Latitude = 45.5427,
-                    Longitude = 32.4476
+                    Latitude = 48.9699,
+                    Longitude = 23.7434
                 },
                 RigthLower = new
                 {
-                    Latitude = 44.5022,
-                    Longitude = 34.6833
+                    Latitude = 48.6425,
+                    Longitude = 24.1691
                 }
             };
 
-            busManager.Send<IСharacterizationRequest>(BusQueueConstants.CharacterizationRequestQueueName, message).Wait();
+            busManager.Send<ISpectralСharacterizationRequest>(BusQueueConstants.CharacterizationRequestQueueName, message).Wait();
         }
     }
 }

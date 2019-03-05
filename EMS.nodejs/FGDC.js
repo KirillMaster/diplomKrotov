@@ -113,7 +113,7 @@ function normalizateKey(key) {
     return res;
 }
 
-fs.readFile('D:\\JS\\diplom\\external\\sortDownloadData\\landsat\\2018-04-09\\178028\\LC08_L1TP_178028_20180409_20180417_01_T1_MTL.txt', 'utf8', (err, data) => {
+fs.readFile('external\\sortDownloadData\\LANDSAT_8_C1_295172.txt', 'utf8', (err, data) => {
 //fs.readFile('D:\\python\\LC08_L1TP_178029_20150722_20170406_01_T1_ANG.txt', 'utf8', (err, data) => {
     if (err) throw err;
     console.log(data);

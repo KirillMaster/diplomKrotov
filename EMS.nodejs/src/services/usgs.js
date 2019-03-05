@@ -452,7 +452,7 @@ function check(coordScene, coordUser){
 
     return true;
 }
-async function getDownloadLink(satellite, startData, endData, countYears = 2, coord = [59, 37, 59, 38], cloudMax = 100, month) {
+async function getDownloadLink(satellite, startData, endData, countYears = 2, coord = [48.6425, 23.7434, 48.9699, 24.1691], cloudMax = 100, month) {
     //const res = await getImageInfo(satellite, startData, endData, coord, cloudMax);
     const res = await getImageInfoArrayDate(satellite, searchTimeRandgeDownload(countYears, month, endData), coord, cloudMax);
 

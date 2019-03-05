@@ -124,7 +124,7 @@ async function getCharacteristics(message){
     console.log(message);
     const requestId = uuid();
     const data = {
-        messageType: ['urn:message:BusContracts:IСharacterizationRequest'],
+        messageType: ['urn:message:BusContracts:ISpectralСharacterizationRequest'],
         message
     };
     message.requestId = requestId;
@@ -136,7 +136,7 @@ async function getCharacteristics(message){
             resolve(result);
         });
         console.log(`Отправляем запрос ${requestId}: `,data);
-        await channel.sendToQueue(characteristicsResultChannel, Buffer.from(JSON.stringify(data)), {persistent: true});
+        await channel.sendToQueue(characteristicsRequestChannel, Buffer.from(JSON.stringify(data)), {persistent: true});
     });
 }
 
