@@ -33,18 +33,17 @@ namespace CharacterizationService.Processors.NDWI
                         LowerRight = rigthLower
                     });
             CalculateNDWI(landsatDecription.Channel5.Normalized, landsatDecription.Channel6.Normalized,
-                cuttedImageInfo);
+                cuttedImageInfo, resultFolder);
 
             return new[] {"info"};
         }
 
-        public void CalculateNDWI(string channel5, string channel6, CuttedImageInfo cuttedImageInfo)
+        public void CalculateNDWI(string channel5, string channel6, CuttedImageInfo cuttedImageInfo, string resultFolder)
         {
             var nirChannel = new LandsatNormilizedSnapshotReader(channel5);
             var swirChannel = new LandsatNormilizedSnapshotReader(channel6);
             var ndwiRanges = new List<Legend.Range>
             {
-                
                 new Legend.Range(-1.0, -0.8, Color.FromArgb(153,92, 0)),
                 new Legend.Range(-0.8, -0.6, Color.FromArgb(171, 122, 44)),
                 new Legend.Range(-0.6, -0.4, Color.FromArgb(184, 146, 81)),
@@ -74,8 +73,8 @@ namespace CharacterizationService.Processors.NDWI
                     }
                 }
 
-                bmp.Save("ndwi_karpati_2016.png");
-                legend.GetLegend().Save("legend_ndwi_karpati_2016.png");
+                bmp.Save(resultFolder + "ndwi_karpati_2016.png");
+                legend.GetLegend().Save(resultFolder + "legend_ndwi_karpati_2016.png");
             }
         }
 

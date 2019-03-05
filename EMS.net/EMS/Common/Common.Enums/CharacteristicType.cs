@@ -16,7 +16,7 @@ namespace Common.Enums
         [Description("Температура подстилающей поверхности")]
         Temperature = 3,
 
-        [Description("Индекс NDWI")]
+        [Description("Индекс влажности NDWI")]
         NDWI = 4
     }
 }

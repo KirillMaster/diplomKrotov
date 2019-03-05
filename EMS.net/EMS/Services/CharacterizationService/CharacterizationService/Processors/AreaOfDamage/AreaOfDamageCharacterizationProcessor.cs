@@ -10,6 +10,7 @@ namespace CharacterizationService.Processors.AreaOfDamage
 {
     public class AreaOfDamageCharacterizationProcessor:AbstractCharacterizationProcessor
     {
+        //в метрах
         private const int LandsatPixelSize = 30;
         
         public AreaOfDamageCharacterizationProcessor(LogWriter logger) : base(logger)

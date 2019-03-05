@@ -72,12 +72,12 @@ namespace Common.Objects.Landsat
         /// <summary>
         /// Канал 10
         /// </summary>
-        public string Channel10 { get; set; }
+        public LandsatSnapshotDescription Channel10 { get; set; }
 
         /// <summary>
         /// Канал 11
         /// </summary>
-        public string Channel11 { get; set; }
+        public LandsatSnapshotDescription Channel11 { get; set; }
 
         /// <summary>
         /// Канал с атмосферными явлениями
@@ -207,13 +207,21 @@ namespace Common.Objects.Landsat
                 throw new FileNotFoundException("Сырой снимок B9 не найден");
             }
 
-            Channel10 = filenames.SingleOrDefault(name => name.EndsWith("B10.TIF", StringComparison.InvariantCultureIgnoreCase));
+            Channel10 = new LandsatSnapshotDescription 
+            {
+                Raw = filenames.SingleOrDefault(name => name.EndsWith("B10.TIF", StringComparison.InvariantCultureIgnoreCase))
+            };
+        
             if (Channel10 == null && withExceptions)
             {
                 throw new FileNotFoundException("Сырой снимок B10 не найден");
             }
 
-            Channel11 = filenames.SingleOrDefault(name => name.EndsWith("B11.TIF", StringComparison.InvariantCultureIgnoreCase));
+            Channel11 = new LandsatSnapshotDescription 
+            { 
+                Raw = filenames.SingleOrDefault(name => name.EndsWith("B11.TIF", StringComparison.InvariantCultureIgnoreCase))
+            };
+
             if (Channel11 == null && withExceptions)
             {
                 throw new FileNotFoundException("Сырой снимок B11 не найден");

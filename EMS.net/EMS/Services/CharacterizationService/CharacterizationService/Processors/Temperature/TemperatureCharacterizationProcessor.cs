@@ -10,6 +10,7 @@ using Common.Helpers;
 using Common.Objects;
 using Common.Objects.Landsat;
 using DeterminingPhenomenonService.Helpers;
+using DeterminingPhenomenonService.Objects;
 using OSGeo.GDAL;
 using Topshelf.Logging;
 
@@ -24,28 +25,44 @@ namespace CharacterizationService.Processors.Temperature
         public override string[] Process(IGeographicPoint leftUpper, IGeographicPoint rigthLower, string dataFolder,
             string resultFolder)
         {
-            var folderDescription = new LandsatDataDescription(@"C:\Users\User\Downloads\Карпаты2\185026_20160826\");
+            //@"C:\Users\User\Downloads\Карпаты2\185026_20160826\");
+            var folderDescription = new LandsatDataDescription(dataFolder);
 
-            var path = @"C:\Users\User\Downloads\Карпаты2\185026_20160826\";
+            var path = folderDescription; //@"C:\Users\User\Downloads\Карпаты2\185026_20160826\";
             LandsatMetadata metadataFile = JsonHelper.Deserialize<LandsatMetadata>(folderDescription.MetadataMtlJson);
             TirsThermalConstants thermalConstants = metadataFile.L1MetadataFile.TirsThermalConstants;
+            var cuttedImageInfo =
+               ClipImageHelper.GetCuttedImageInfoByPolygon(folderDescription.Channel10.Raw,
+                   new GeographicPolygon
+                   {
+                       UpperLeft = leftUpper,
+                       LowerRight = rigthLower
+                   });
 
-            using (var ds = Gdal.Open(path + "2016_Temperature.TIF", Access.GA_ReadOnly))
+            using (var ds = Gdal.Open(folderDescription.Channel10.Raw, Access.GA_ReadOnly))
             {
                 CalculateTemperature(ds.GetRasterBand(1),
                     metadataFile.L1MetadataFile.RadiometricRescaling.RadianceMultBand11,
                     metadataFile.L1MetadataFile.RadiometricRescaling.RadianceAddBand11,
                     thermalConstants.K1ConstantBand11,
-                    thermalConstants.K2ConstantBand11
+                    thermalConstants.K2ConstantBand11,
+                    resultFolder,
+                    cuttedImageInfo
                 );
             }
 
-            return new[] {"temperature_2016.png"};
+            return new[] {resultFolder + "temperature_2016.png"};
         }
 
-        public static void CalculateTemperature(Band band, double ml, double al, double K1, double K2)
+        public static void CalculateTemperature(Band band, 
+            double ml,
+            double al,
+            double K1,
+            double K2,
+            string resultFolder,
+            CuttedImageInfo cuttedImageInfo)
         {
-            var resultFilename = "karpati_2016.png";
+            var resultFilename = resultFolder + "temperature_2016.png";
             var temperatureRanges = new List<Legend.Range>
             {
                 //new Legend.Range(-30, -25, Color.FromArgb(60, 0, 255)),
@@ -71,19 +88,25 @@ namespace CharacterizationService.Processors.Temperature
             };
             using (band)
             {
-                var width = band.XSize;
-                var heigth = band.YSize;
+                var width = cuttedImageInfo.Width;//band.XSize;
+                var heigth = cuttedImageInfo.Height;//band.YSize;
                 var legend = new Legend(5, 45, 5, Color.Yellow, Color.Red);
                 double max = -100000;
                 double min = 100000;
-                legend.GetLegend().Save("legend.png");
+                legend.GetLegend().Save(resultFolder + "legend.png");
+
+
                 using (var bmp = new Bitmap(width, heigth))
                 {
                     for (var row = 0; row < heigth; row++)
                     {
                         var buffer = new int[width];
 
-                        band.ReadRaster(0, row, band.XSize, 1, buffer, band.XSize, 1, 0, 0);
+                        band.ReadRaster(cuttedImageInfo.Col, 
+                            cuttedImageInfo.Row + row,
+                            cuttedImageInfo.Width,
+                            1, buffer, width, 1, 0, 0);
+
                         for (var col = 0; col < width; col++)
                         {
                             if (buffer[col] != 0)
@@ -104,9 +127,8 @@ namespace CharacterizationService.Processors.Temperature
                         }
                     }
 
-                    var kek = 0;
                     bmp.Save(resultFilename);
-                    legend.GetLegend().Save("legent_2016_karpati.png");
+                    legend.GetLegend().Save(resultFolder + "legent_2016_karpati.png");
                 }
             }
         }

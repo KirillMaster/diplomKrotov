@@ -35,10 +35,13 @@ namespace Common.PointsReaders
         /// Constructor
         /// </summary>
         /// <param name="filename">File name</param>
-        public LandsatNormilizedSnapshotReader(string filename)
+        /// <param name="unsafeMode">Без проверки на l8n</param>
+        public LandsatNormilizedSnapshotReader(string filename, bool unsafeMode = false)
         {
             var extension = Path.GetExtension(filename);
-            if (string.IsNullOrEmpty(extension) || !extension.Equals(_extenstion, StringComparison.CurrentCultureIgnoreCase))
+            if ((string.IsNullOrEmpty(extension) 
+                || !extension.Equals(_extenstion, StringComparison.CurrentCultureIgnoreCase))
+                 && !unsafeMode)
             {
                 throw new ArgumentException("Extension should be .l8n");
             }

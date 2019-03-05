@@ -23,7 +23,7 @@ namespace CharacterizationServiceStub
                         SatelliteType = SatelliteType.Landsat8,
                         DataFolder = @"C:\diplom\EMS.nodejs\external\sortDownloadData\Landsat_8_C1\2018-05-12\185026",
                         ResultFolder = @"C:\diplom\",
-                        CharacteristicType = CharacteristicType.NDWI
+                        CharacteristicType = CharacteristicType.Temperature
                     }
                 },
                 LeftUpper = new
@@ -31,7 +31,7 @@ namespace CharacterizationServiceStub
                     Latitude = 48.9699,
                     Longitude = 23.7434
                 },
-                RigthLower = new
+                RightLower = new
                 {
                     Latitude = 48.6425,
                     Longitude = 24.1691
