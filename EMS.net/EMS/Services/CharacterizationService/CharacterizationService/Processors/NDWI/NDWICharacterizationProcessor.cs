@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CharacterizationService.Abstraction;
 using Common.Helpers;
 using Common.Objects;
@@ -36,7 +32,7 @@ namespace CharacterizationService.Processors.NDWI
             CalculateNDWI(landsatDecription.Channel5.Normalized, landsatDecription.Channel6.Normalized,
                 cuttedImageInfo, resultFolder);
 
-            return new[] { resultFolder  + "ndwi_karpati_2016.png" };
+            return new[] { resultFolder  + "\\ndwi.png" };
         }
 
         public void CalculateNDWI(string channel5, string channel6, CuttedImageInfo cuttedImageInfo, string resultFolder)
@@ -74,7 +70,7 @@ namespace CharacterizationService.Processors.NDWI
                     }
                 }
 
-                bmp.Save(resultFolder + "ndwi_karpati_2016.png");
+                bmp.Save(resultFolder + "\\ndwi.png");
             }
         }
 

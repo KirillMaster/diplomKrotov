@@ -20,18 +20,31 @@ const CHARACTERISTICS = {
         folder: 'areaOfDamage'
     },
     DIGITAL_RELIEF_MODEL: {
-        title: 'Цифоровая модель рельефа',
+        title: 'Цифровая модель рельефа',
         satellite: 'SRTM',
         type: 2,
         folder: 'digitalReliefModel'
+    },
+    TEMPERATURE: {
+        title: 'Температура',
+        satellite: 'LANDSAT',
+        type: 3,
+        folder: 'temperature'
+    },
+    NDWI: {
+        title: 'Индекс влажности',
+        satellite: 'LANDSAT',
+        type: 4,
+        folder: 'ndwi'
     }
+
 };
 
 const RESEARCHES = {
     FOREST_DISEASES: {
         name: 'Болезни лесных насаждений',
         satellites: ['LANDSAT'],
-        characteristics: ['AREA_OF_DAMAGE', 'DIGITAL_RELIEF_MODEL'],
+        characteristics: ['AREA_OF_DAMAGE', 'DIGITAL_RELIEF_MODEL', 'TEMPERATURE', 'NDWI'],
         type: 1
     },
     SOIL_EROSION: {
@@ -205,6 +218,7 @@ async function handleResearch(research, startData, endData, countYears = 2, coor
         await researchController.setStatus(researchRes.id, STATE.FIND_PHENOMENON.code);
 
         const pathPhenomenon = `${userDir}\\phenomenon`;
+        const pathCharateristic = `${userDir}\\characteristics`;
 
         var message = {
             resultFolder: pathPhenomenon,
@@ -227,6 +241,7 @@ async function handleResearch(research, startData, endData, countYears = 2, coor
             return await researchController.setStatus(researchRes.id, STATE.NO_FIND_PHENOMENON.code);
         }
 
+        await researchController.setCharacteristicResultFolder(researchRes.id, pathCharateristic);
         await researchController.setPhenomenonResultFolder(researchRes.id, pathPhenomenon);
         await researchController.setStatus(researchRes.id, STATE.DOWNLOAD_DATA_FOR_CHARACTERISTICS.code);
 

@@ -51,7 +51,7 @@ namespace CharacterizationService.Processors.Temperature
                 );
             }
 
-            return new[] {resultFolder + "temperature_2016.png"};
+            return new[] {resultFolder + "\\temperature.png"};
         }
 
         public static void CalculateTemperature(Band band, 
@@ -62,7 +62,7 @@ namespace CharacterizationService.Processors.Temperature
             string resultFolder,
             CuttedImageInfo cuttedImageInfo)
         {
-            var resultFilename = resultFolder + "temperature_2016.png";
+            var resultFilename = resultFolder + "\\temperature.png";
             var temperatureRanges = new List<Legend.Range>
             {
                 //new Legend.Range(-30, -25, Color.FromArgb(60, 0, 255)),

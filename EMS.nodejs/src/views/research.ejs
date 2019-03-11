@@ -54,7 +54,7 @@
                                                 const arrayResearch = data.data.items;
 
                                                 $('.list-group').empty();
-                                                $('.list-group').append(`<a href="#" class="list-group-item active">Выберите иследования</a>`)
+                                                $('.list-group').append(`<a href="#" class="list-group-item active">Выберите исcледования</a>`)
                                                 for (let i = 0; i < arrayResearch.length; i++) {
 
                                                     $('.list-group').append(`<a href="#" id="${arrayResearch[i].id}" name="menu_item" class="list-group-item list-group-item-action">${new Date(arrayResearch[i].createdAt).toISOString().substring(0, 10)} ${arrayResearch[i].researchName}</a>`);
@@ -68,7 +68,7 @@
                                         },
                                         error: function (err) {
                                             console.log(err)
-                                            alert('Ошибка получения списка запросов Вы не автроризированы');
+                                            alert('Ошибка получения списка запросов. Вы не авторизированы');
                                         }
                                     });
                                 }
@@ -83,7 +83,7 @@
                 },
                 error: function (err) {
                     console.log(err)
-                    alert('Ошибка получения списка запросов Вы не автроризированы');
+                    alert('Ошибка получения списка запросов. Вы не авторизированы');
                 }
             });
         });
@@ -135,12 +135,12 @@
             elementTable.append(tbody);
             let tr = _createTr();
             tbody.append(tr);
-            tr.append(_createTd('Индитификатор запроса'));
+            tr.append(_createTd('Идентификатор запроса'));
             tr.append(_createTd(infoObj.id));
 
             tr = _createTr();
             tbody.append(tr);
-            tr.append(_createTd('Природное явленеие'));
+            tr.append(_createTd('Природное явление'));
             tr.append(_createTd(infoObj.researchName));
 
             tr = _createTr();
@@ -352,7 +352,26 @@
 
                             if (data.data.phenomenonResultFolder) {
                                 const phenomenonName = `${data.data.phenomenonResultFolder.split('external\\')[1]}\\visible_dynamic.png`;
-                                elementDiv.append(`<img src="${phenomenonName}" alt="Lights" style="width:100%">`);
+                                elementDiv.append(`<figure class="sign"><p><img src="${phenomenonName}" alt="Lights" style="width:100%"></p><figcaption>Динамика распространения явления</figcaption></figure>`);
+                                const template = `${data.data.phenomenonResultFolder.split('external\\')[1].split('\\phenomenon')[0]}\\characteristics\\`;
+
+
+                                var characteristicName = template + `temperature\\temperature.png`;
+                                elementDiv.append(`<figure class="sign"><p><img src="${characteristicName}" alt="Lights" style="width:100%"></p><figcaption>Температура</figcaption></figure>`);
+                                characteristicName = `${data.data.phenomenonResultFolder.split('external\\')[1].split('\\phenomenon')[0]}\\characteristics\\digitalReliefModel\\exposition.png`;
+                                elementDiv.append(`<figure class="sign"><p><img src="${characteristicName}" alt="Lights" style="width:100%"></p><figcaption>Экспозиция рельефа</figcaption></figure>`);
+                                characteristicName = `${data.data.phenomenonResultFolder.split('external\\')[1].split('\\phenomenon')[0]}\\characteristics\\digitalReliefModel\\height.png`;
+                                elementDiv.append(`<figure class="sign"><p><img src="${characteristicName}" alt="Lights" style="width:100%"></p><figcaption>Высота рельефа</figcaption></figure>`);
+                                characteristicName = `${data.data.phenomenonResultFolder.split('external\\')[1].split('\\phenomenon')[0]}\\characteristics\\digitalReliefModel\\skew.png`;
+                                elementDiv.append(`<figure class="sign"><p><img src="${characteristicName}" alt="Lights" style="width:100%"></p><figcaption>Херня какая-то</figcaption></figure>`);
+                                characteristicName = `${data.data.phenomenonResultFolder.split('external\\')[1].split('\\phenomenon')[0]}\\characteristics\\ndwi\\ndwi.png`;
+                                elementDiv.append(`<figure class="sign"><p><img src="${characteristicName}" alt="Lights" style="width:100%"></p><figcaption>Индекс влажности</figcaption></figure>`);
+                            }
+
+
+                            //костыль для нахождения папки с характеристиками
+                            if(data.data.phenomenonResultFolder){
+
                             }
                             //elementDiv.append(`<p>${infoResearchString}</p>`);
                             elementDiv.append(createTable(data.data));

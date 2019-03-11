@@ -52,6 +52,15 @@ async function setPhenomenonResultFolder(id, phenomenonResultFolder){
 
 }
 
+async function setCharacteristicResultFolder(id, characteristicResultFolder){
+    const request = await Requests.findOne({where:{id}});
+    if(!request){
+        return console.log('request не найден');
+    }
+    request.characteristicResultFolder = characteristicResultFolder;
+    await request.save();
+}
+
 async function setMiniImagePath(id, miniImagePath){
     const request = await Requests.findOne({where:{id}});
     if(!request){
@@ -85,5 +94,6 @@ module.exports = {
     setMiniImagePath,
     setLinksDownload,
     setStatus,
-    setPhenomenonResultFolder
+    setPhenomenonResultFolder,
+    setCharacteristicResultFolder
 };
