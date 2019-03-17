@@ -83,22 +83,22 @@ namespace DeterminingPhenomenonService
 
                 var landsatData = new LandsatDataDescription(folder);
 
-                if (_phenomenon == PhenomenonType.ForestPlantationsDeseases)
-                {
+              //  if (_phenomenon == PhenomenonType.ForestPlantationsDeseases)
+              //  {
                     //пока 5 6
                     necessaryDataFiles.AddRange(
-                        new[] {landsatData.Channel4.Normalized, landsatData.Channel5.Normalized});
-                }
+                      new[] {landsatData.Channel4.Normalized, landsatData.Channel5.Normalized});
+               // }
 
                 using (var isodataPointsReader = new LandsatIsodataPointsReader(necessaryDataFiles.ToArray()))
                 {
                     List<Cluster> clusters = new List<Cluster>();
                     var jsonClustersFilename = string.Empty;
 
-                    if (_phenomenon == PhenomenonType.ForestPlantationsDeseases)
-                    {
+                    //if (_phenomenon == PhenomenonType.ForestPlantationsDeseases)
+                    //{
                         jsonClustersFilename = FilenamesConstants.B4B5Clusters;
-                    }
+                   // }
 
                     if (landsatData.ClustersJson.Any())
                     {
@@ -177,14 +177,14 @@ namespace DeterminingPhenomenonService
 
                     double dynamic = -1.0;
 
-                    if (phenomenon == PhenomenonType.ForestPlantationsDeseases)
-                    {
+                    //if (phenomenon == PhenomenonType.ForestPlantationsDeseases)
+                    //{
                         dynamic = pastNdvi >= 0.2 && pastNdvi < 1
                             ? (pastNdvi > currentNdvi
                                 ? Math.Abs(currentNdvi - pastNdvi) / currentNdvi
                                 : 0)
                             : 0;
-                    }
+                    //}
 
                     dymanicMask[row * width + col] = (byte)(dynamic >= 0.3 ? 1 : 0);
                 }
@@ -223,8 +223,8 @@ namespace DeterminingPhenomenonService
                 temporaryData.Buffers = new LandsatCuttedBuffers();
                 var temporaryDataBuffers = new LandsatCuttedBuffers();
 
-                if (_phenomenon == PhenomenonType.ForestPlantationsDeseases)
-                {
+                //if (_phenomenon == PhenomenonType.ForestPlantationsDeseases)
+                //{
                     var temporaryGeotiffDataFile = temporaryData.DataDescription.Channel4.Raw;
 
                     var cuttedImageInfo =
@@ -239,7 +239,7 @@ namespace DeterminingPhenomenonService
 
                         temporaryData.Buffers.Channels[channelBuffer.Key] =  buffer;
                     }
-                }
+                //}
             }
         }
 

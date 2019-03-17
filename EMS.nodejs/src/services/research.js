@@ -6,6 +6,7 @@ const fs = require('fs');
 const config = require('config');
 const util = require('util');
 
+const testMode = false;
 
 const SERVICES = {
     SRTM: require('./SRTM'),
@@ -63,6 +64,7 @@ const RESEARCHES = {
         type: 4
     }
 };
+
 
 const satellites = {
     LANDSAT: {
@@ -140,8 +142,6 @@ async function handleResearch(research, startData, endData, countYears = 2, coor
     const researchRes = await researchController.create(username, RESEARCHES[research].name, coord, [], countYears, [], [],
         [], cloudMax, month, 1);
 
-    console.log(countYears);
-
     const requestId = researchRes.id;
 
     const userDir = await createUserResFolders(requestId);
@@ -150,44 +150,13 @@ async function handleResearch(research, startData, endData, countYears = 2, coor
         // По названию исследования узнаём снимки каких спутников нам нужны и Какие сервисы их получают
         const satellitesHandle = RESEARCHES[research].satellites;
         // Для каждого спутника получаем ссылки для скачивания
-        let linksDownload = [];
-
-        for (let i = 0; i < satellitesHandle.length; i++) {
-            const satellite = satellitesHandle[i];
-            const satelliteName = satellites[satellite].name;
-
-            // По названию спутника определим сервис который получает ссылки на снимким
-            const serviceName = satellites[satellite].service;
-            switch (serviceName) {
-                case 'SRTM': {
-                    const srtmResult = await SERVICES[serviceName].getDownloadLink(satelliteName, coord);
-                    if (srtmResult.length === 0) {//Если модуль не получил ссылки для скачивания
-                        console.log('Подходящие снимки не найдены!!!');
-                        return await researchController.setStatus(researchRes.id, STATE.ERROR_GET_PHOTOS.code);
-                    }
-                    linksDownload = linksDownload.concat(srtmResult);
-
-                    break;
-                }
-                case 'USGS': {
-                    const usgsResult = await SERVICES[serviceName].getDownloadLink(satelliteName, startData, endData, countYears, coord, cloudMax, month);
-                    if (usgsResult.length === 0) { //Если модуль не получил ссылки для скачивания
-                        console.log('Подходящие снимки не найдены!!!');
-                        return await researchController.setStatus(researchRes.id, STATE.ERROR_GET_PHOTOS.code);
-                    }
-                    linksDownload = linksDownload.concat(usgsResult);
-
-                    break;
-                }
-            }
-        }
+        let linksDownload = await _getLinksToDownloadForDeterminingPhenomenon(satellitesHandle,requestId, startData, endData, countYears, cloudMax, coord, month);
 
         await researchController.setMiniImagePath(researchRes.id, linksDownload.filter(r => !!r.imagePath).map(r => r.imagePath));
         await researchController.setLinksDownload(researchRes.id, linksDownload.map(r => r.linkDownloadArchive));
 
         // Попытаемся скачать снимки
         await researchController.setStatus(researchRes.id, STATE.DOWNLOADING.code);
-
 
         let arrayLandsat = null;
         try {
@@ -200,125 +169,184 @@ async function handleResearch(research, startData, endData, countYears = 2, coor
         await researchController.setPathsDownload(researchRes.id, arrayLandsat);
 
         // После получения снимков Landsat
-
-
         // Проверим есть ли откалиброванные данные для каждой папки
-        for (let i = 0; i < arrayLandsat.length; i++) {
-            const pathCheck = arrayLandsat[i];
-            if (!(await checkExistFolder(`${pathCheck}\\NormalizationData`))) { // Если нет отклаброванный данных
-                console.log('Калибруем данные для: pathCheck');
-                await amqp.calibration({
-                    folder: pathCheck,
-                    satelliteType: satellites.LANDSAT.type
-                });
-                console.log('Калибровка прошла успаешно калибровка: ')
-            }
-        }
-        // Начнем поиск явления
-        await researchController.setStatus(researchRes.id, STATE.FIND_PHENOMENON.code);
+        await _sendDataToCalibration(arrayLandsat);
+        await determinePhenomenon(requestId);
 
-        const pathPhenomenon = `${userDir}\\phenomenon`;
-        const pathCharateristic = `${userDir}\\characteristics`;
-
-        var message = {
-            resultFolder: pathPhenomenon,
-            leftUpper: {
-                latitude: coord[2],
-                Longitude: coord[1]
-            },
-            rightLower: {
-                latitude: coord[0],
-                longitude: coord[3]
-            },
-            phenomenon: RESEARCHES[research].type,
-            dataFolders: arrayLandsat
-        };
-
-        const getPhenomenonResult = await amqp.getPhenomenon(message);
-
-
-        if(!getPhenomenonResult.isDetermined){
-            return await researchController.setStatus(researchRes.id, STATE.NO_FIND_PHENOMENON.code);
-        }
-
-        await researchController.setCharacteristicResultFolder(researchRes.id, pathCharateristic);
-        await researchController.setPhenomenonResultFolder(researchRes.id, pathPhenomenon);
-        await researchController.setStatus(researchRes.id, STATE.DOWNLOAD_DATA_FOR_CHARACTERISTICS.code);
-
-
-        const needSatellitesForCharacteristics = {};
-
-        const characteristics = RESEARCHES[research].characteristics;
-
-        characteristics.forEach( async characteristicName => {
-            const satellite = CHARACTERISTICS[characteristicName].satellite;
-            needSatellitesForCharacteristics[satellite] = '';
-            // Создадим папки для хар-к
-            await createCharacteristicFolder(userDir, CHARACTERISTICS[characteristicName].folder);
-        });
-        // Скачаем данные для каждого спутника
-        const needSatellites = Object.keys(needSatellitesForCharacteristics);
-
-        for (let i = 0; i < needSatellites.length; i++) {
-            const satellite = needSatellites[i];
-            if (satellite === 'LANDSAT') { // Мы получали данные перед обнуружением явления
-                needSatellitesForCharacteristics[satellite] = arrayLandsat[arrayLandsat.length - 1];
-                continue;
-            }
-            const serviceName = satellites[satellite].service;
-            const satelliteName = satellites[satellite].name;
-            switch (serviceName) {
-                case 'SRTM': {
-                    const srtmResult = await SERVICES[serviceName].getDownloadLink(satelliteName, coord);
-                    needSatellitesForCharacteristics[satellite] = (await _downloadAsync(uuid(), srtmResult))[0];
-
-                    break;
-                }
-                case 'USGS': {
-                    const usgsResult = await SERVICES[serviceName].getDownloadLink(satelliteName, startData, endData, 1, coord, cloudMax, month);
-                    needSatellitesForCharacteristics[satellite] = (await _downloadAsync(uuid(), usgsResult))[0];
-
-                    break;
-                }
-            }
-        }
-
-
-        await researchController.setStatus(researchRes.id, STATE.FIND_CHARACTERISTICS.code);
-        var message = {
-            // phenomenonType: RESEARCHES[research].type,
-            leftUpper: {
-                latitude: coord[2],
-                Longitude: coord[1]
-            },
-            rightLower: {
-                latitude: coord[0],
-                longitude: coord[3]
-            },
-            characteristics: characteristics.map(character => {
-                const ch = CHARACTERISTICS[character];
-                const sat = ch.satellite;
-                let dataFolder = needSatellitesForCharacteristics[sat];
-                if (character === 'AREA_OF_DAMAGE') {
-                    dataFolder = `${userDir}\\phenomenon`
-                }
-
-                return {
-                    satelliteType: satellites[sat].type,
-                    dataFolder:dataFolder,
-                    resultFolder: `${userDir}\\characteristics\\${ch.folder}`,
-                    characteristicType: ch.type
-                }
-            })
-        };
-        const characteristicsResult = await amqp.getCharacteristics(message);
-
-        console.log(characteristicsResult);
-        await researchController.setStatus(researchRes.id, STATE.COMPLETED.code);
     }, 10);
 
 
     return researchRes;
+}
+
+
+async function determinePhenomenon(requestId){
+    // Начнем поиск явления
+    await researchController.setStatus(requestId, STATE.FIND_PHENOMENON.code);
+    let request = await researchController.getRequest(requestId);
+    let research = Object.keys(RESEARCHES).find(x => RESEARCHES[x].name === request.researchName);
+    let coord = request.coordinateUser;
+    const userDir = `${config.resultUserPath}\\${requestId}`;
+
+    const pathPhenomenon = `${userDir}\\phenomenon`;
+
+
+    let message = {
+        resultFolder: pathPhenomenon,
+        leftUpper: {
+            latitude: coord[2],
+            Longitude: coord[1]
+        },
+        rightLower: {
+            latitude: coord[0],
+            longitude: coord[3]
+        },
+        phenomenon: RESEARCHES[research].type,
+        dataFolders: request.pathsDownload
+    };
+
+    const getPhenomenonResult = await amqp.getPhenomenon(message);
+
+
+    if(!getPhenomenonResult.isDetermined){
+        return await researchController.setStatus(requestId, STATE.NO_FIND_PHENOMENON.code);
+    }
+    await researchController.setPhenomenonResultFolder(requestId, pathPhenomenon);
+}
+
+async function determineCharacteristics(requestId){
+
+    const userDir = `${config.resultUserPath}\\${requestId}`;
+    const pathCharateristic = `${userDir}\\characteristics`;
+    await researchController.setCharacteristicResultFolder(requestId, pathCharateristic);
+    await researchController.setStatus(requestId, STATE.DOWNLOAD_DATA_FOR_CHARACTERISTICS.code);
+    let request = await researchController.getRequest(requestId);
+    let research = Object.keys(RESEARCHES).find(x => RESEARCHES[x].name === request.researchName);
+
+
+    const needSatellitesForCharacteristics = {};
+
+    const characteristics = RESEARCHES[research].characteristics;
+
+    characteristics.forEach( async characteristicName => {
+        const satellite = CHARACTERISTICS[characteristicName].satellite;
+        needSatellitesForCharacteristics[satellite] = '';
+        // Создадим папки для хар-к
+        await createCharacteristicFolder(userDir, CHARACTERISTICS[characteristicName].folder);
+    });
+    // Скачаем данные для каждого спутника
+    const needSatellites = Object.keys(needSatellitesForCharacteristics);
+
+    await _downloadDataForDeterminingCharacteristics(needSatellites, request.pathsDownload ,needSatellitesForCharacteristics);
+    await researchController.setStatus(requestId, STATE.FIND_CHARACTERISTICS.code);
+
+    const message = {
+        // phenomenonType: RESEARCHES[research].type,
+        leftUpper: {
+            latitude: coord[2],
+            Longitude: coord[1]
+        },
+        rightLower: {
+            latitude: coord[0],
+            longitude: coord[3]
+        },
+        characteristics: characteristics.map(character => {
+            const ch = CHARACTERISTICS[character];
+            const sat = ch.satellite;
+            let dataFolder = needSatellitesForCharacteristics[sat];
+            if (character === 'AREA_OF_DAMAGE') {
+                dataFolder = `${userDir}\\phenomenon`
+            }
+
+            return {
+                satelliteType: satellites[sat].type,
+                dataFolder:dataFolder,
+                resultFolder: `${userDir}\\characteristics\\${ch.folder}`,
+                characteristicType: ch.type
+            }
+        })
+    };
+
+    await amqp.getCharacteristics(message);
+    await researchController.setStatus(requestId, STATE.COMPLETED.code);
+}
+
+
+async function _getLinksToDownloadForDeterminingPhenomenon(satellitesHandle, requestId, startData, endData, countYears, cloudMax, coord, month){
+
+    let linksDownload = [];
+    for (let i = 0; i < satellitesHandle.length; i++) {
+        const satellite = satellitesHandle[i];
+        const satelliteName = satellites[satellite].name;
+
+        // По названию спутника определим сервис который получает ссылки на снимким
+        const serviceName = satellites[satellite].service;
+        switch (serviceName) {
+            case 'SRTM': {
+                const srtmResult = await SERVICES[serviceName].getDownloadLink(satelliteName, coord);
+                if (srtmResult.length === 0) {//Если модуль не получил ссылки для скачивания
+                    console.log('Подходящие снимки не найдены!!!');
+                    return await researchController.setStatus(requestId, STATE.ERROR_GET_PHOTOS.code);
+                }
+                linksDownload = linksDownload.concat(srtmResult);
+
+                break;
+            }
+            case 'USGS': {
+                const usgsResult = await SERVICES[serviceName].getDownloadLink(satelliteName, startData, endData, countYears, coord, cloudMax, month);
+                if (usgsResult.length === 0) { //Если модуль не получил ссылки для скачивания
+                    console.log('Подходящие снимки не найдены!!!');
+                    return await researchController.setStatus(requestId, STATE.ERROR_GET_PHOTOS.code);
+                }
+                linksDownload = linksDownload.concat(usgsResult);
+
+                break;
+            }
+        }
+    }
+
+    return linksDownload;
+}
+
+async function _downloadDataForDeterminingCharacteristics(needSatellites, arrayLandsat, needSatellitesForCharacteristics){
+    for (let i = 0; i < needSatellites.length; i++) {
+        const satellite = needSatellites[i];
+        if (satellite === 'LANDSAT') { // Мы получали данные перед обнуружением явления
+            needSatellitesForCharacteristics[satellite] = arrayLandsat[arrayLandsat.length - 1];
+            continue;
+        }
+        const serviceName = satellites[satellite].service;
+        const satelliteName = satellites[satellite].name;
+        switch (serviceName) {
+            case 'SRTM': {
+                var srtmResult = await SERVICES[serviceName].getDownloadLink(satelliteName, coord);
+                needSatellitesForCharacteristics[satellite] = (await _downloadAsync(uuid(), srtmResult))[0];
+
+                break;
+            }
+            case 'USGS': {
+                const usgsResult = await SERVICES[serviceName].getDownloadLink(satelliteName, startData, endData, 1, coord, cloudMax, month);
+                needSatellitesForCharacteristics[satellite] = (await _downloadAsync(uuid(), usgsResult))[0];
+
+                break;
+            }
+        }
+    }
+}
+
+
+async function _sendDataToCalibration(arrayLandsat){
+    for (let i = 0; i < arrayLandsat.length; i++) {
+        const pathCheck = arrayLandsat[i];
+        if (!(await checkExistFolder(`${pathCheck}\\NormalizationData`))) { // Если нет отклаброванный данных
+            console.log('Калибруем данные для: pathCheck');
+            await amqp.calibration({
+                folder: pathCheck,
+                satelliteType: satellites.LANDSAT.type
+            });
+            console.log('Калибровка прошла успешно.');
+        }
+    }
 }
 
 

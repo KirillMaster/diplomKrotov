@@ -1,4 +1,9 @@
-ymaps.ready(init);
+try {
+    ymaps.ready(init);
+}
+catch(ex){
+    console.log('ymaps not included');
+}
 
 
 let Map = {};

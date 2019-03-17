@@ -1,0 +1,12 @@
+[
+  {
+    "satellite": "SRTM",
+    "linkDownloadArchive": "https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/Eurasia/N48E023.hgt.zip",
+    "nameFile": "N48E023.hgt"
+  },
+  {
+    "satellite": "SRTM",
+    "linkDownloadArchive": "https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/Eurasia/N48E024.hgt.zip",
+    "nameFile": "N48E024.hgt"
+  }
+]

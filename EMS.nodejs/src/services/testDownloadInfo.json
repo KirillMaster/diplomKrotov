@@ -1,0 +1,106 @@
+[
+  {
+    "orig": {
+      "acquisitionDate": "2018-05-12",
+      "startTime": "2018-05-12",
+      "endTime": "2018-05-12",
+      "spatialFootprint": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              22.34892,
+              48.22697
+            ],
+            [
+              24.82952,
+              47.78451
+            ],
+            [
+              25.56088,
+              49.48307
+            ],
+            [
+              22.99677,
+              49.93168
+            ],
+            [
+              22.34892,
+              48.22697
+            ]
+          ]
+        ]
+      },
+      "sceneBounds": "22.34892,47.78451,25.56088,49.93168",
+      "browseUrl": "https://earthexplorer.usgs.gov/browse/landsat_8_c1/2018/185/026/LC08_L1TP_185026_20180512_20180517_01_T1.jpg",
+      "dataAccessUrl": "https://earthexplorer.usgs.gov/order/process?dataset_name=LANDSAT_8_C1&ordered=LC81850262018132LGN00&node=INVSVC",
+      "downloadUrl": "https://earthexplorer.usgs.gov/download/external/options/LANDSAT_8_C1/LC81850262018132LGN00/INVSVC/",
+      "entityId": "LC81850262018132LGN00",
+      "displayId": "LC08_L1TP_185026_20180512_20180517_01_T1",
+      "metadataUrl": "https://earthexplorer.usgs.gov/metadata/xml/12864/LC81850262018132LGN00/",
+      "fgdcMetadataUrl": "https://earthexplorer.usgs.gov/fgdc/12864/LC81850262018132LGN00/save_xml",
+      "modifiedDate": "2018-05-17",
+      "orderUrl": "https://earthexplorer.usgs.gov/order/process?dataset_name=LANDSAT_8_C1&ordered=LC81850262018132LGN00&node=INVSVC",
+      "bulkOrdered": false,
+      "ordered": false,
+      "summary": "Entity ID: LC08_L1TP_185026_20180512_20180517_01_T1, Acquisition Date: 12-MAY-18, Path: 185, Row: 26"
+    },
+    "linkDownloadArchive": "https://earthexplorer.usgs.gov/download/12864/LC81850262018132LGN00/STANDARD/INVSVC",
+    "imagePath": "C:\\diplom\\EMS.nodejs\\external\\image\\ko7Dw.jpg",
+    "modifiedDate": "2018-05-17",
+    "uniqIdScene": "185026",
+    "satellite": "Landsat_8_C1"
+  },
+  {
+    "orig": {
+      "acquisitionDate": "2017-06-10",
+      "startTime": "2017-06-10",
+      "endTime": "2017-06-10",
+      "spatialFootprint": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              22.39612,
+              48.22766
+            ],
+            [
+              24.87647,
+              47.78337
+            ],
+            [
+              25.61055,
+              49.48142
+            ],
+            [
+              23.04676,
+              49.93192
+            ],
+            [
+              22.39612,
+              48.22766
+            ]
+          ]
+        ]
+      },
+      "sceneBounds": "22.39612,47.78337,25.61055,49.93192",
+      "browseUrl": "https://earthexplorer.usgs.gov/browse/landsat_8_c1/2017/185/026/LC08_L1TP_185026_20170610_20180527_01_T1.jpg",
+      "dataAccessUrl": "https://earthexplorer.usgs.gov/order/process?dataset_name=LANDSAT_8_C1&ordered=LC81850262017161LGN01&node=INVSVC",
+      "downloadUrl": "https://earthexplorer.usgs.gov/download/external/options/LANDSAT_8_C1/LC81850262017161LGN01/INVSVC/",
+      "entityId": "LC81850262017161LGN01",
+      "displayId": "LC08_L1TP_185026_20170610_20180527_01_T1",
+      "metadataUrl": "https://earthexplorer.usgs.gov/metadata/xml/12864/LC81850262017161LGN01/",
+      "fgdcMetadataUrl": "https://earthexplorer.usgs.gov/fgdc/12864/LC81850262017161LGN01/save_xml",
+      "modifiedDate": "2018-05-27",
+      "orderUrl": "https://earthexplorer.usgs.gov/order/process?dataset_name=LANDSAT_8_C1&ordered=LC81850262017161LGN01&node=INVSVC",
+      "bulkOrdered": false,
+      "ordered": false,
+      "summary": "Entity ID: LC08_L1TP_185026_20170610_20180527_01_T1, Acquisition Date: 10-JUN-17, Path: 185, Row: 26"
+    },
+    "linkDownloadArchive": "https://earthexplorer.usgs.gov/download/12864/LC81850262017161LGN01/STANDARD/INVSVC",
+    "imagePath": "C:\\diplom\\EMS.nodejs\\external\\image\\7Zbue.jpg",
+    "modifiedDate": "2018-05-27",
+    "uniqIdScene": "185026",
+    "satellite": "Landsat_8_C1"
+  }
+]

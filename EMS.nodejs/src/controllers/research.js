@@ -86,6 +86,14 @@ async function setStatus(id, status){
     await request.save();
 }
 
+async function getRequest(id){
+    const request = await Requests.findOne({where:{id}});
+    if(!request){
+        return console.log('request не найден');
+    }
+    return request;
+}
+
 
 
 module.exports = {
@@ -95,5 +103,6 @@ module.exports = {
     setLinksDownload,
     setStatus,
     setPhenomenonResultFolder,
-    setCharacteristicResultFolder
+    setCharacteristicResultFolder,
+    getRequest
 };

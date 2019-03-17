@@ -43,6 +43,7 @@ app.use('/map', checkUser/* jwt, authorizedJWT*/, require('./src/routes/map'));
 app.use('/research', checkUser /* jwt, authorizedJWT*/, require('./src/routes/research'));
 app.use('/login' /* jwt, authorizedJWT*/, require('./src/routes/login'));
 app.use('/registration' /* jwt, authorizedJWT*/, require('./src/routes/registration'));
+app.use('/dynamic' /* jwt, authorizedJWT*/, require('./src/routes/dynamic'));
 
 // подключаем обработчик успешных запросов (для форматирования вывода)
 app.use(`/`, successHandler);
