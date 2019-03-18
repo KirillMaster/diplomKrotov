@@ -11,7 +11,8 @@ namespace CharacterizationService.Processors.DigitalReliefModel
         public override string Process(SrtmDataset dataset, string folder)
         {
             var filePath = $@"{folder}\height.png";
-            using (var result = DrawLib.CreateImageWithLegend(dataset.Width, dataset.Heigth, @"..\..\Content\heigth.png"))
+            // using (var result = DrawLib.CreateImageWithLegend(dataset.Width, dataset.Heigth, @"..\..\Content\heigth.png"))
+            using (var result = new Bitmap(dataset.Width, dataset.Heigth))
             {
                 for (var x = 1; x < dataset.Width - 1; x++)
                 {

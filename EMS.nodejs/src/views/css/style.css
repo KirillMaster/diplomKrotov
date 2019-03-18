@@ -144,3 +144,9 @@
 	text-align: center;
 	width: 20px;
 }
+
+div.frame {
+	background: #fff;
+	padding: 0.8em;
+	border: solid 2px #ddd;
+}

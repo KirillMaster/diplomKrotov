@@ -55,7 +55,8 @@ namespace CharacterizationService.Processors.NDWI
             var legend = new Legend(ndwiRanges.ToArray());
             var nirBuffer = ClipImageHelper.ReadBufferByIndexes(cuttedImageInfo, nirChannel);
             var swirBuffer = ClipImageHelper.ReadBufferByIndexes(cuttedImageInfo, swirChannel);
-            using (var bmp = DrawLib.CreateImageWithLegend(cuttedImageInfo.Width, cuttedImageInfo.Height, @"..\..\Content\NDWI.png"))
+            //using (var bmp = DrawLib.CreateImageWithLegend(cuttedImageInfo.Width, cuttedImageInfo.Height, @"..\..\Content\NDWI.png"))
+            using (var bmp = new Bitmap(cuttedImageInfo.Width, cuttedImageInfo.Height))
             {
                 for (var row = 0; row < cuttedImageInfo.Height; row++)
                 {

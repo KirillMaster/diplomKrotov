@@ -16,13 +16,8 @@ using DeterminingPhenomenonService.Helpers;
 using DeterminingPhenomenonService.Objects;
 using DrawImageLibrary;
 using Isodata;
-using Isodata.Abstraction;
 using Isodata.Objects;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using OSGeo.GDAL;
 using Topshelf.Logging;
-using IsodataMathHelper = Isodata.Helpers.MathHelper;
 
 namespace DeterminingPhenomenonService
 {

@@ -96,7 +96,8 @@ namespace CharacterizationService.Processors.Temperature
 
 
 
-                using (var bmp = DrawLib.CreateImageWithLegend(cuttedImageInfo.Width, cuttedImageInfo.Height, @"..\..\Content\temperature.png"))
+                //using (var bmp = DrawLib.CreateImageWithLegend(cuttedImageInfo.Width, cuttedImageInfo.Height, @"..\..\Content\temperature.png"))
+                using (var bmp = new Bitmap(cuttedImageInfo.Width, cuttedImageInfo.Height))
                 {
                     for (var row = 0; row < heigth; row++)
                     {

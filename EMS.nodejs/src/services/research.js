@@ -214,14 +214,16 @@ async function determinePhenomenon(requestId){
     await researchController.setPhenomenonResultFolder(requestId, pathPhenomenon);
 }
 
-async function determineCharacteristics(requestId){
+//Координаты, передаваемые в этот метод - это координаты картинки.
+//Их необходимо смаппить в географические.
+async function determineCharacteristics(requestId, coord, research){
 
     const userDir = `${config.resultUserPath}\\${requestId}`;
     const pathCharateristic = `${userDir}\\characteristics`;
     await researchController.setCharacteristicResultFolder(requestId, pathCharateristic);
     await researchController.setStatus(requestId, STATE.DOWNLOAD_DATA_FOR_CHARACTERISTICS.code);
     let request = await researchController.getRequest(requestId);
-    let research = Object.keys(RESEARCHES).find(x => RESEARCHES[x].name === request.researchName);
+   // let research = Object.keys(RESEARCHES).find(x => RESEARCHES[x].name === request.researchName);
 
 
     const needSatellitesForCharacteristics = {};
@@ -237,7 +239,7 @@ async function determineCharacteristics(requestId){
     // Скачаем данные для каждого спутника
     const needSatellites = Object.keys(needSatellitesForCharacteristics);
 
-    await _downloadDataForDeterminingCharacteristics(needSatellites, request.pathsDownload ,needSatellitesForCharacteristics);
+    await _downloadDataForDeterminingCharacteristics(needSatellites, request.pathsDownload ,needSatellitesForCharacteristics, coord);
     await researchController.setStatus(requestId, STATE.FIND_CHARACTERISTICS.code);
 
     const message = {
@@ -270,7 +272,6 @@ async function determineCharacteristics(requestId){
     await amqp.getCharacteristics(message);
     await researchController.setStatus(requestId, STATE.COMPLETED.code);
 }
-
 
 async function _getLinksToDownloadForDeterminingPhenomenon(satellitesHandle, requestId, startData, endData, countYears, cloudMax, coord, month){
 
@@ -308,7 +309,7 @@ async function _getLinksToDownloadForDeterminingPhenomenon(satellitesHandle, req
     return linksDownload;
 }
 
-async function _downloadDataForDeterminingCharacteristics(needSatellites, arrayLandsat, needSatellitesForCharacteristics){
+async function _downloadDataForDeterminingCharacteristics(needSatellites, arrayLandsat, needSatellitesForCharacteristics, coord){
     for (let i = 0; i < needSatellites.length; i++) {
         const satellite = needSatellites[i];
         if (satellite === 'LANDSAT') { // Мы получали данные перед обнуружением явления
@@ -403,5 +404,6 @@ async function createUserResFolders(uuid) {
 }
 
 module.exports = {
-    handleResearch
+    handleResearch,
+    determineCharacteristics
 };

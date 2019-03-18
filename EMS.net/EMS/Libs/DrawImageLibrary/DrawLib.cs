@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using AForge.Imaging.Filters;
@@ -21,31 +22,57 @@ namespace DrawImageLibrary
         /// <returns></returns>
         public static Bitmap CreateImageWithLegend(int width, int heigth, string legendFileName)
         {
-            using (var legend = new Bitmap(legendFileName))
+            var legend = new Bitmap(legendFileName);
+            Image newLegend = null;
+     
+            var bitmapWidth = width + legend.Width;
+            var bitmapHeigth = heigth;
+            if (heigth < legend.Height)
             {
-                var bitmapWidth = width + legend.Width;
-                var bitmapHeigth = heigth;
-                if (heigth < legend.Height)
-                {
-                    bitmapHeigth = legend.Height;
-                }
-
-                var bitmap = new Bitmap(bitmapWidth, bitmapHeigth);
-                using (var graphics = Graphics.FromImage(bitmap))
-                {
-                   graphics.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
-                }
-
-                var x = bitmap.Width - legend.Width;
-                var y = bitmap.Height / 2 - legend.Height / 2;
-
-                using (var graphics = Graphics.FromImage(bitmap))
-                {
-                    graphics.DrawImage(legend, x, y, legend.Width, legend.Height);
-                }
-
-                return bitmap;
+                 newLegend = _resizeImage(legend, legend.Width, heigth);
+                 legend.Dispose();
+                 legend = (Bitmap)newLegend;
+                // float xDpi = legend.Width * 96 / 72;
+                // float yDpi = heigth * 96 / 72;
+                //  legend.SetResolution(xDpi, yDpi);
+                 bitmapHeigth = legend.Height;
             }
+
+            var bitmap = new Bitmap(bitmapWidth, bitmapHeigth);
+            using (var graphics = Graphics.FromImage(bitmap))
+            {
+                graphics.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
+            }
+
+            var x = bitmap.Width - legend.Width;
+            var y = bitmap.Height / 2 - legend.Height / 2;
+
+            using (var graphics = Graphics.FromImage(bitmap))
+            {
+                graphics.DrawImage(legend, x, y, legend.Width, legend.Height);
+            }
+
+            legend.Dispose();
+
+            if(newLegend != null)
+            {
+                newLegend.Dispose();
+            }
+
+            return bitmap;
+        }
+
+
+        private static Image _resizeImage(Image imgToResize,int newWidth, int newHeight)
+        {
+            Bitmap b = new Bitmap(newWidth, newHeight);
+            Graphics g = Graphics.FromImage((Image)b);
+            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+            g.DrawImage(imgToResize, 0, 0, newWidth, newHeight);
+            g.Dispose();
+
+            return (Image)b;
         }
 
         /// <summary>
@@ -97,15 +124,17 @@ namespace DrawImageLibrary
             {
                 for (var row = imageInfo.Row; row < imageInfo.Row + imageInfo.Height; row++)
                 {
-                    var redBuffer = redChannel.ReadScanline(row);
-                    var greenBuffer = greenChannel.ReadScanline(row);
-                    var blueBuffer = blueChannel.ReadScanline(row);
+                    double[] redBuffer = redChannel.ReadScanline(row);
+                    double[] greenBuffer = greenChannel.ReadScanline(row);
+                    double[] blueBuffer = blueChannel.ReadScanline(row);
                     for (var col = imageInfo.Col; col < imageInfo.Col + imageInfo.Width; col++)
                     {
                         var redValue = CalculateValue(redBuffer[col], factor);
                         var greenValue = CalculateValue(greenBuffer[col], factor);
                         var blueValue = CalculateValue(blueBuffer[col], factor);
-                        var color = Color.FromArgb(redValue, greenValue, blueValue);
+                        var color = Color.FromArgb((byte) Math.Ceiling(redValue * 0.3f)
+                            , (byte)Math.Ceiling(greenValue * 0.59f)
+                            , (byte)Math.Ceiling(blueValue * 0.11f));
 
                         bitmap.SetPixel(y, x, color);
 

@@ -12,7 +12,8 @@ namespace CharacterizationService.Processors.DigitalReliefModel
         public override string Process(SrtmDataset dataset, string folder)
         {
             var filePath = $@"{folder}\skew.png";
-            using (var result = DrawLib.CreateImageWithLegend(dataset.Width, dataset.Heigth, @"..\..\Content\skew.png"))
+            //using (var result = DrawLib.CreateImageWithLegend(dataset.Width, dataset.Heigth, @"..\..\Content\skew.png"))
+            using (var result = new Bitmap(dataset.Width, dataset.Heigth))
             {
                 for (var x = 1; x < dataset.Width - 1; x++)
                 {
