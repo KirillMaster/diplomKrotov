@@ -92,7 +92,7 @@ namespace DrawImageLibrary
                     {
                         result.SetPixel(col, row,
                             mask.GetPixel(col, row).R > 0 
-                                ? Color.Red 
+                                ? Color.Purple
                                 : background.GetPixel(col, row));
                         }
                 }
@@ -132,9 +132,12 @@ namespace DrawImageLibrary
                         var redValue = CalculateValue(redBuffer[col], factor);
                         var greenValue = CalculateValue(greenBuffer[col], factor);
                         var blueValue = CalculateValue(blueBuffer[col], factor);
-                        var color = Color.FromArgb((byte) Math.Ceiling(redValue * 0.3f)
-                            , (byte)Math.Ceiling(greenValue * 0.59f)
-                            , (byte)Math.Ceiling(blueValue * 0.11f));
+                        var color = Color.FromArgb(redValue, greenValue, blueValue);
+
+                        //отображение зеленой картинки
+                        //var color = Color.FromArgb((byte) Math.Ceiling(redValue * 0.3f)
+                        //    , (byte)Math.Ceiling(greenValue * 0.59f)
+                        //    , (byte)Math.Ceiling(blueValue * 0.11f));
 
                         bitmap.SetPixel(y, x, color);
 
@@ -147,6 +150,11 @@ namespace DrawImageLibrary
 
                 bitmap.Save(resultFileName, ImageFormat.Png);
             }
+
+            redChannel.Dispose();
+            greenChannel.Dispose();
+            blueChannel.Dispose();
+
         }
 
         /// <summary>

@@ -37,6 +37,24 @@ const CHARACTERISTICS = {
         satellite: 'LANDSAT',
         type: 4,
         folder: 'ndwi'
+    },
+    CHANNELS_432: {
+        title: 'Каналы 4,3,2',
+        satellite: 'LANDSAT',
+        type: 5,
+        folder: 'channels'
+    },
+    CHANNELS_543: {
+        title: 'Каналы 5,4,3',
+        satellite: 'LANDSAT',
+        type: 6,
+        folder: 'channels'
+    },
+    CHANNELS_753: {
+        title: 'Каналы 7,5,3',
+        satellite: 'LANDSAT',
+        type: 7,
+        folder: 'channels'
     }
 
 };
@@ -45,22 +63,25 @@ const RESEARCHES = {
     FOREST_DISEASES: {
         name: 'Болезни лесных насаждений',
         satellites: ['LANDSAT'],
-        characteristics: ['AREA_OF_DAMAGE', 'DIGITAL_RELIEF_MODEL', 'TEMPERATURE', 'NDWI'],
+        characteristics: ['AREA_OF_DAMAGE', 'DIGITAL_RELIEF_MODEL', 'TEMPERATURE', 'NDWI', 'CHANNELS_432', 'CHANNELS_543', 'CHANNELS_753'],
         type: 1
     },
     SOIL_EROSION: {
         name: 'Эрозия почвы',
         satellites: ['LANDSAT'],
+        characteristics: ['AREA_OF_DAMAGE', 'DIGITAL_RELIEF_MODEL', 'TEMPERATURE', 'NDWI', 'CHANNELS_432', 'CHANNELS_543', 'CHANNELS_753'],
         type: 2
     },
     SOIL_POLLUTION_BY_OIL_PRODUCTS: {
         name: 'Загрязнение почвы нефтепродуктами',
         satellites: ['LANDSAT'],
+        characteristics: ['AREA_OF_DAMAGE', 'DIGITAL_RELIEF_MODEL', 'TEMPERATURE', 'NDWI', 'CHANNELS_432', 'CHANNELS_543', 'CHANNELS_753'],
         type: 3
     },
     SURFACE_DUMPS: {
         name: 'Поверхностные свалки',
         satellites: ['LANDSAT'],
+        characteristics: ['AREA_OF_DAMAGE', 'DIGITAL_RELIEF_MODEL', 'TEMPERATURE', 'NDWI', 'CHANNELS_432', 'CHANNELS_543', 'CHANNELS_753'],
         type: 4
     }
 };

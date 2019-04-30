@@ -243,16 +243,78 @@ namespace DeterminingPhenomenonService
             var currentFolder = _dataFolders.Last();
             var landsatDescription = new LandsatDataDescription(currentFolder);
 
-            var currentImageInfo = ClipImageHelper.GetCuttedImageInfoByPolygon(landsatDescription.Channel4.Raw, _polygon);
+            CuttedImageInfo cuttedImageInfo = ClipImageHelper.GetCuttedImageInfoByPolygon(landsatDescription.Channel4.Raw, _polygon);
 
             DrawLib.DrawMask(bytes, width, height, _pathToDynamicFile);
 
             DrawLib.DrawEdges(_pathToDynamicFile, _pathToEdgedDynamicFile);
 
-            DrawLib.DrawNaturalColor(landsatDescription.Channel4.Normalized, landsatDescription.Channel3.Normalized, landsatDescription.Channel2.Normalized,
-                currentImageInfo, _pathToVisibleImage);
+            DrawChannelsAccordingToPhenomenonType(_phenomenon, landsatDescription, cuttedImageInfo);
 
-            DrawLib.DrawMask(_pathToEdgedDynamicFile, _pathToVisibleImage, _pathToVisibleDynamicFile);
+            DrawLib.DrawMask(_pathToEdgedDynamicFile, _pathToVisibleImage+"4-3-2.png", _pathToVisibleDynamicFile);
+        }
+
+
+        private void DrawChannelsAccordingToPhenomenonType(PhenomenonType phenomenonType
+            , LandsatDataDescription landsatDescription
+            , CuttedImageInfo cuttedImageInfo)
+        {
+            switch (phenomenonType)
+            {
+                case PhenomenonType.ForestPlantationsDeseases: 
+                {
+                   DrawLib.DrawNaturalColor(landsatDescription.Channel4.Normalized
+                       , landsatDescription.Channel3.Normalized
+                       , landsatDescription.Channel2.Normalized,
+                     cuttedImageInfo, _pathToVisibleImage+"4-3-2.png");
+
+                   DrawLib.DrawNaturalColor(landsatDescription.Channel5.Normalized
+                      , landsatDescription.Channel4.Normalized
+                      , landsatDescription.Channel3.Normalized,
+                    cuttedImageInfo, _pathToVisibleImage + "5-4-3.png");
+
+                   DrawLib.DrawNaturalColor(landsatDescription.Channel7.Normalized
+                      , landsatDescription.Channel5.Normalized
+                      , landsatDescription.Channel3.Normalized,
+                    cuttedImageInfo, _pathToVisibleImage + "7-5-3.png");
+
+                } break;
+                case PhenomenonType.SoilErosion: 
+                {
+                     DrawLib.DrawNaturalColor(landsatDescription.Channel7.Normalized
+                      , landsatDescription.Channel5.Normalized
+                      , landsatDescription.Channel3.Normalized,
+                        cuttedImageInfo, _pathToVisibleImage + "7-5-3.png");
+
+                        DrawLib.DrawNaturalColor(landsatDescription.Channel4.Normalized
+                     , landsatDescription.Channel3.Normalized
+                     , landsatDescription.Channel2.Normalized,
+                   cuttedImageInfo, _pathToVisibleImage + "4-3-2.png");
+                }  break;
+                case PhenomenonType.SoilPollutionByOilProducts : 
+                {
+                      DrawLib.DrawNaturalColor(landsatDescription.Channel4.Normalized
+                        , landsatDescription.Channel3.Normalized
+                        , landsatDescription.Channel2.Normalized,
+                      cuttedImageInfo, _pathToVisibleImage + "4-3-2.png");
+
+                }  break;
+                case PhenomenonType.SurfaceDumps :
+                {
+                     DrawLib.DrawNaturalColor(landsatDescription.Channel4.Normalized
+                       , landsatDescription.Channel3.Normalized
+                       , landsatDescription.Channel2.Normalized,
+                     cuttedImageInfo, _pathToVisibleImage + "4-3-2.png");
+                }  break;
+                case PhenomenonType.Unknown:
+                {
+                    DrawLib.DrawNaturalColor(landsatDescription.Channel4.Normalized
+                        , landsatDescription.Channel3.Normalized
+                        , landsatDescription.Channel2.Normalized,
+                    cuttedImageInfo, _pathToVisibleImage + "4-3-2.png");
+
+                } break;
+            }
         }
     }
 }

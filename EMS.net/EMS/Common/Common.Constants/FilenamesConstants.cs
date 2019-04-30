@@ -14,7 +14,7 @@
         public const string PathToCloudMaskPngFile = @"\cloudMask.png";
         public const string PathToDynamicFile = @"\dynamic.png";
         public const string PathToEdgedDynamicFile = @"\edged_dynamic.png";
-        public const string PathToVisibleImage = @"\visible.png";
+        public const string PathToVisibleImage = @"\visible";
         public const string PathToVisibleDynamicFile = @"\visible_dynamic.png";
         public const string PathToDynamicGeoPointsJson = @"\dynamicGeoPoints.json";
 

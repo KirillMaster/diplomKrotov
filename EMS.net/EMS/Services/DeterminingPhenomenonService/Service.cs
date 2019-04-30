@@ -42,10 +42,12 @@ namespace DeterminingPhenomenonService
 
             var processor = new DeterminingPhenomenonProcessor(Logger, request.DataFolders, request.ResultFolder, polygon, request.Phenomenon);
 
+            bool isDetermined = processor.Proccess();
+
             var response = new DeterminingPhenomenonResponse
             {
                 RequestId = request.RequestId,
-                IsDetermined = processor.Proccess()
+                IsDetermined = isDetermined
             };
             IDeterminingPhenomenonResponse resp =
                 new DeterminingPhenomenonResponse {IsDetermined = false, RequestId = "asdasdasd"};

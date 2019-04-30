@@ -106,6 +106,7 @@
     <Compile Include="Objects\DigitalReliefModel\SrtmDataset.cs" />
     <Compile Include="Objects\DigitalReliefModel\SrtmFile.cs" />
     <Compile Include="Processors\AreaOfDamage\AreaOfDamageCharacterizationProcessor.cs" />
+    <Compile Include="Processors\Channels\ChannelsCharacteristicsProcessor.cs" />
     <Compile Include="Processors\DigitalReliefModelCharacterizationProcessor.cs" />
     <Compile Include="Processors\DigitalReliefModel\ExpositionReliefCharacterisitcProcessor.cs" />
     <Compile Include="Processors\DigitalReliefModel\HeigthReliefCharacterisitcProcessor.cs" />

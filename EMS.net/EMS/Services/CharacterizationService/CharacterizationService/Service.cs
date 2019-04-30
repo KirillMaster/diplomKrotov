@@ -28,7 +28,10 @@ namespace CharacterizationService
                 {CharacteristicType.AreaOfDamage, new AreaOfDamageCharacterizationProcessor(Logger) },
                 {CharacteristicType.DigitalReliefModel, new DigitalReliefModelCharacterizationProcessor(Logger)},
                 {CharacteristicType.Temperature,  new TemperatureCharacterizationProcessor(Logger)},
-                {CharacteristicType.NDWI,  new NDWICharacterizationProcessor(Logger)}
+                {CharacteristicType.NDWI,  new NDWICharacterizationProcessor(Logger)},
+                {CharacteristicType.Channels432, new ChannelsCharacteristicsProcessor(Logger, CharacteristicType.Channels432)},
+                {CharacteristicType.Channels543, new ChannelsCharacteristicsProcessor(Logger, CharacteristicType.Channels543)},
+                {CharacteristicType.Channels753, new ChannelsCharacteristicsProcessor(Logger, CharacteristicType.Channels753)},
             };
 
         public bool Start(HostControl hostControl)

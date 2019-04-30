@@ -21,10 +21,14 @@ function getPoints() {
 };
 
 Map.init = function () {
+    let coords = getCoords();
+    let center = [(+coords[0] + +coords[2])/2.0, (+coords[1] + +coords[3])/2.0];
+
     Map.map = new ymaps.Map("map", {
-        center: [44.547521, 33.705542],
+        center: center,
         zoom: 10
     });
+
     Map.map.events.add('click', function (e) {
         if (Map.points.length < 2) {
             var coords = e.get('coords');
@@ -58,50 +62,64 @@ Map.init = function () {
         }
     });
 
-
+    clickMapHandler( {coords : [coords[0], coords[1]]});
+    clickMapHandler( {coords : [coords[2], coords[3]]});
 };
 
 
-function init() {
+function clickMapHandler(e){
+    if (Map.points.length < 2) {
+        var coords = e['coords'] || e.get('coords');
+        var placemark = new ymaps.Placemark([coords[0], coords[1]], {
+            preset: 'islands#icon',
+            iconColor: '#0095b6'
+        }, {
+            draggable: true
+        });
 
+        placemark.events.add('click', function () {
+            Map.map.geoObjects.remove(placemark);
+            var index = Map.points.findIndex(obj => obj.geometry._coordinates[0] === placemark.geometry._coordinates[0] &&
+                obj.geometry._coordinates[1] === placemark.geometry._coordinates[1]);
+            Map.points.splice(index, 1);
+            if (Map.points.length === 1) {
+                $("#map").trigger("removeRectangle");
+            }
+        });
+
+        placemark.events.add("dragend", function () {
+            Map.map.geoObjects.remove(Map.rectangle);
+            $("#map").trigger("addRectangle");
+        });
+
+        Map.map.geoObjects.add(placemark);
+        Map.points.push(placemark);
+        if (Map.points.length === 2) {
+            $("#map").trigger("addRectangle");
+        }
+    }
+}
+
+
+
+function getCoords(){
+    return  [$('#ex1').val() ,$('#ex2').val(),$('#ex3').val(),$('#ex4').val()];
+}
+
+
+
+function init() {
+    let coords = getCoords();
+    let center = [(+coords[0] + +coords[2])/2.0, (+coords[1] + +coords[3])/2.0];
     Map.map = new ymaps.Map("map", {
-        center: [44.547521, 33.705542],
+        center: center,
         zoom: 10
     });
 
     Map.map.setType('yandex#satellite');
 
     Map.map.events.add('click', function (e) {
-        if (Map.points.length < 2) {
-            var coords = e.get('coords');
-            var placemark = new ymaps.Placemark([coords[0], coords[1]], {
-                preset: 'islands#icon',
-                iconColor: '#0095b6'
-            }, {
-                draggable: true
-            });
-
-            placemark.events.add('click', function () {
-                Map.map.geoObjects.remove(placemark);
-                var index = Map.points.findIndex(obj => obj.geometry._coordinates[0] === placemark.geometry._coordinates[0] &&
-                    obj.geometry._coordinates[1] === placemark.geometry._coordinates[1]);
-                Map.points.splice(index, 1);
-                if (Map.points.length === 1) {
-                    $("#map").trigger("removeRectangle");
-                }
-            });
-
-            placemark.events.add("dragend", function () {
-                Map.map.geoObjects.remove(Map.rectangle);
-                $("#map").trigger("addRectangle");
-            });
-
-            Map.map.geoObjects.add(placemark);
-            Map.points.push(placemark);
-            if (Map.points.length === 2) {
-                $("#map").trigger("addRectangle");
-            }
-        }
+        clickMapHandler(e);
     });
 
     $("#map").on("addRectangle", function () {
@@ -130,6 +148,16 @@ function init() {
     $("#map").on("removeRectangle", function () {
         Map.map.geoObjects.remove(Map.rectangle);
     });
+
+    clickMapHandler( {coords : [coords[0], coords[1]]});
+    clickMapHandler( {coords : [coords[2], coords[3]]});
+
+    /*$('.js-coords').change(function(){
+        $("#map").trigger("removeRectangle");
+        let coords = getCoords();
+        clickMapHandler({coords : [coords[0], coords[1]]});
+        clickMapHandler({coords : [coords[2], coords[3]]});
+    }); */
 }
 
 // function init() {

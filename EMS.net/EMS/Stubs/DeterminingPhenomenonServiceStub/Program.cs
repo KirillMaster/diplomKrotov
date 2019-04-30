@@ -14,7 +14,7 @@ namespace DeterminingPhenomenonServiceStub
 
             var message = new
             {
-                ResultFolder = @"C:\diplom\EMS.nodejs\external\resultUser\test",
+                ResultFolder = @"C:\diplom\EMS.nodejs\external\resultUser\test2",
                 LeftUpper = new GeographicPoint
                 {
                     Latitude  = 48.9699,
@@ -28,8 +28,8 @@ namespace DeterminingPhenomenonServiceStub
                 Phenomenon = PhenomenonType.ForestPlantationsDeseases,
                 DataFolders = new[]
                 {
-                    @"C:\diplom\EMS.nodejs\external\sortDownloadData\Landsat_8_C1\test\1",
-                    @"C:\diplom\EMS.nodejs\external\sortDownloadData\Landsat_8_C1\test\2",
+                    @"C:\diplom\EMS.nodejs\external\sortDownloadData\Landsat_8_C1\2017-06-10\185026",
+                    @"C:\diplom\EMS.nodejs\external\sortDownloadData\Landsat_8_C1\2018-05-12\185026",
                 },
                 RequestId = "531aab7b-02d2-49b4-81b6-077f0d3a24aa",
             };

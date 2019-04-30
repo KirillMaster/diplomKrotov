@@ -132,7 +132,8 @@
                 if (data.code === 200) {
 
                     if (data.data.phenomenonResultFolder) {
-                        const phenomenonName = `${data.data.phenomenonResultFolder.split('external\\')[1]}\\visible_dynamic.png`;
+                        const phenomenonFolder = `${data.data.phenomenonResultFolder.split('external\\')[1]}`;
+                        const phenomenonName = phenomenonFolder +'\\visible_dynamic.png';
                         elementDiv.append(`<figure class="sign"><p><img src="../${phenomenonName}" id="phenomenon" alt="Lights" ></p><figcaption>Динамика распространения явления</figcaption></figure>`);
 
 
@@ -142,6 +143,28 @@
                         ias = $('img#phenomenon').imgAreaSelect(options);
 
                         geoCoords = data.data.coordinateUser;
+
+                        const channels_432 = phenomenonFolder + '\\visible4-3-2.png';
+                        const channels_543 = phenomenonFolder + '\\visible5-4-3.png';
+                        const channels_753 = phenomenonFolder + '\\visible7-5-3.png';
+
+                        if(data.data.researchName === 'Болезни лесных насаждений'){
+                            elementDiv.append(`<figure class="sign"><p><img src="../${channels_432}" alt="Lights" width="1000" height="1000"></p><figcaption>Каналы 4-3-2</figcaption></figure>`);
+                            elementDiv.append(`<figure class="sign"><p><img src="../${channels_753}" alt="Lights" width="1000" height="1000"></p><figcaption>Каналы 7-5-3</figcaption></figure>`);
+                            elementDiv.append(`<figure class="sign"><p><img src="../${channels_543}" alt="Lights" width="1000" height="1000"></p><figcaption>Каналы 5-4-3</figcaption></figure>`);
+                        }
+                        else if(data.data.researchName === 'Эрозия почвы'){
+                            elementDiv.append(`<figure class="sign"><p><img src="../${channels_432}" alt="Lights" width="1000" height="1000"></p><figcaption>Каналы 4-3-2</figcaption></figure>`);
+                            elementDiv.append(`<figure class="sign"><p><img src="../${channels_753}" alt="Lights" width="1000" height="1000"></p><figcaption>Каналы 7-5-3</figcaption></figure>`);
+                        }
+                        else if(data.data.researchName === 'Загрязнение почвы нефтепродуктами'){
+                            elementDiv.append(`<figure class="sign"><p><img src="../${channels_432}" alt="Lights" width="1000" height="1000"></p><figcaption>Каналы 4-3-2</figcaption></figure>`);
+                        }
+                        else if(data.data.researchName === 'Поверхностные свалки'){
+                            elementDiv.append(`<figure class="sign"><p><img src="../${channels_432}" alt="Lights" width="1000" height="1000"></p><figcaption>Каналы 4-3-2</figcaption></figure>`);
+                        }
+
+
 
                         const template = `${data.data.phenomenonResultFolder.split('external\\')[1].split('\\phenomenon')[0]}\\characteristics\\`;
 

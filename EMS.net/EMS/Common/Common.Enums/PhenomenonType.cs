@@ -2,9 +2,25 @@
 {
     public enum PhenomenonType
     {
-        Unknown = 0, 
+        /// <summary>
+        /// Неизвестный тип
+        /// </summary>
+        Unknown = 0,
+        /// <summary>
+        /// Болезни лесных насаждений
+        /// </summary>
         ForestPlantationsDeseases = 1,
+        /// <summary>
+        /// Эрозия почвы
+        /// </summary>
         SoilErosion = 2,
-        SoilPollutionByOilProducts = 3
+        /// <summary>
+        /// Загрязнение почвы нефтепродуктами
+        /// </summary>
+        SoilPollutionByOilProducts = 3,
+        /// <summary>
+        /// Поверхностные свалки
+        /// </summary>
+        SurfaceDumps = 4
     }
 }
