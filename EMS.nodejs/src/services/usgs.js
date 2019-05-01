@@ -145,8 +145,8 @@ async function getImageInfoArrayDate(satellite, arrayDate, coord, cloudMax = 100
                 longitude: coord[1]
             },
             upperRight: {
-                lattude: coord[2],
-                lonigitude: coord[3]
+                latitude: coord[2],
+                longitude: coord[3]
             }
         },
         maxCloudCover: cloudMax,

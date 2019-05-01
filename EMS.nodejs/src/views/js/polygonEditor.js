@@ -141,6 +141,11 @@ function init() {
         $("#ex3").attr("value", arrLat[1]);
         $("#ex4").attr("value", arrLot[1]);
 
+        $("#ex1").val(arrLat[0]);
+        $("#ex2").val(arrLot[0]);
+        $("#ex3").val(arrLat[1]);
+        $("#ex4").val(arrLot[1]);
+
 
         Map.map.geoObjects.add(Map.rectangle);
     });
@@ -152,12 +157,14 @@ function init() {
     clickMapHandler( {coords : [coords[0], coords[1]]});
     clickMapHandler( {coords : [coords[2], coords[3]]});
 
-    /*$('.js-coords').change(function(){
+   $('.js-coords').change(function(){
+        Map.points = [];
+        Map.map.geoObjects.splice(0,Map.map.geoObjects.getLength());
         $("#map").trigger("removeRectangle");
         let coords = getCoords();
         clickMapHandler({coords : [coords[0], coords[1]]});
         clickMapHandler({coords : [coords[2], coords[3]]});
-    }); */
+    });
 }
 
 // function init() {

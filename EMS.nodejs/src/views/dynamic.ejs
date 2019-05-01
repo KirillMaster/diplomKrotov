@@ -143,10 +143,11 @@
                         ias = $('img#phenomenon').imgAreaSelect(options);
 
                         geoCoords = data.data.coordinateUser;
+                        const template = `${data.data.phenomenonResultFolder.split('external\\')[1].split('\\phenomenon')[0]}\\characteristics\\`;
 
-                        const channels_432 = phenomenonFolder + '\\visible4-3-2.png';
-                        const channels_543 = phenomenonFolder + '\\visible5-4-3.png';
-                        const channels_753 = phenomenonFolder + '\\visible7-5-3.png';
+                        const channels_432 = template + '\\channels4-3-2.jpg';
+                        const channels_543 = template + '\\channels5-4-3.jpg';
+                        const channels_753 = template + '\\channels7-5-3.jpg';
 
                         if(data.data.researchName === 'Болезни лесных насаждений'){
                             elementDiv.append(`<figure class="sign"><p><img src="../${channels_432}" alt="Lights" width="1000" height="1000"></p><figcaption>Каналы 4-3-2</figcaption></figure>`);
@@ -166,7 +167,7 @@
 
 
 
-                        const template = `${data.data.phenomenonResultFolder.split('external\\')[1].split('\\phenomenon')[0]}\\characteristics\\`;
+
 
                         var characteristicName = template + `temperature\\temperature.png`;  //width="1000" height="1000"
                         elementDiv.append(`<figure class="sign"><p><img src="../${characteristicName}" alt="Lights" width="1000" height="1000"></p><figcaption>Температура</figcaption></figure>`);
