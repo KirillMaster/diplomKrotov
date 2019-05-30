@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 using CharacterizationService.Abstraction;
 using Common.Helpers;
 using Common.Objects;
@@ -29,6 +32,18 @@ namespace CharacterizationService.Processors.NDWI
                         UpperLeft = leftUpper,
                         LowerRight = rigthLower
                     });
+
+           
+            try
+            {
+                string[] filePaths = Directory.GetFiles(@"C:\diplom\EMS.net\EMS\Services\CharacterizationService\CharacterizationService\Content");
+                File.Copy(filePaths.Where(x => x.Contains("NDWI_legend.png")).First(), resultFolder + "\\NDWI_legend.png");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Файл уже существует");
+            }
+      
             CalculateNDWI(landsatDecription.Channel5.Normalized, landsatDecription.Channel6.Normalized,
                 cuttedImageInfo, resultFolder);
 
@@ -55,7 +70,7 @@ namespace CharacterizationService.Processors.NDWI
             var legend = new Legend(ndwiRanges.ToArray());
             var nirBuffer = ClipImageHelper.ReadBufferByIndexes(cuttedImageInfo, nirChannel);
             var swirBuffer = ClipImageHelper.ReadBufferByIndexes(cuttedImageInfo, swirChannel);
-            //using (var bmp = DrawLib.CreateImageWithLegend(cuttedImageInfo.Width, cuttedImageInfo.Height, @"..\..\Content\NDWI.png"))
+           // using (var bmp = DrawLib.CreateImageWithLegend(cuttedImageInfo.Width, cuttedImageInfo.Height, @"..\..\Content\NDWI.png"))
             using (var bmp = new Bitmap(cuttedImageInfo.Width, cuttedImageInfo.Height))
             {
                 for (var row = 0; row < cuttedImageInfo.Height; row++)

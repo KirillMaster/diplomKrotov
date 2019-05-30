@@ -14,6 +14,7 @@ using DeterminingPhenomenonService.Objects;
 using DrawImageLibrary;
 using OSGeo.GDAL;
 using Topshelf.Logging;
+using System.IO;
 
 namespace CharacterizationService.Processors.Temperature
 {
@@ -63,6 +64,16 @@ namespace CharacterizationService.Processors.Temperature
             CuttedImageInfo cuttedImageInfo)
         {
             var resultFilename = resultFolder + "\\temperature.png";
+         
+            try
+            {
+                string[] filePaths = Directory.GetFiles(@"C:\diplom\EMS.net\EMS\Services\CharacterizationService\CharacterizationService\Content");
+                File.Copy(filePaths.Where(x => x.Contains("temperature_legend.png")).First(), resultFolder + "\\temperature_legend.png");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Файл уже существует");
+            }
             var temperatureRanges = new List<Legend.Range>
             {
                 //new Legend.Range(-30, -25, Color.FromArgb(60, 0, 255)),
@@ -79,7 +90,7 @@ namespace CharacterizationService.Processors.Temperature
                 //new Legend.Range(25, 30, Color.FromArgb(255, 55, 0)),
                 //new Legend.Range(30, 35, Color.FromArgb(255, 45, 0)),
                 //new Legend.Range(35, 40, Color.FromArgb(255, 35, 0)),
-                //new Legend.Range(40, 45, Color.FromArgb(255, 0, 0))
+                //new Legend.Range(40, 45, Color.FromArgb(255, 0, 0)),
                 //new Legend.Range(20, 25, Color.FromArgb(255, 80, 0)),
                 //new Legend.Range(25, 30, Color.FromArgb(255, 55, 0)),
                 //new Legend.Range(30, 35, Color.FromArgb(255, 45, 0)),

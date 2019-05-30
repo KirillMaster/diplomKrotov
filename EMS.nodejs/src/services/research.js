@@ -171,17 +171,20 @@ async function handleResearch(research, startData, endData, countYears = 2, coor
         // По названию исследования узнаём снимки каких спутников нам нужны и Какие сервисы их получают
         const satellitesHandle = RESEARCHES[research].satellites;
         // Для каждого спутника получаем ссылки для скачивания
-        let linksDownload = await _getLinksToDownloadForDeterminingPhenomenon(satellitesHandle,requestId, startData, endData, countYears, cloudMax, coord, month);
+        //let linksDownload = await _getLinksToDownloadForDeterminingPhenomenon(satellitesHandle,requestId, startData, endData, countYears, cloudMax, coord, month);
 
-        await researchController.setMiniImagePath(researchRes.id, linksDownload.filter(r => !!r.imagePath).map(r => r.imagePath));
-        await researchController.setLinksDownload(researchRes.id, linksDownload.map(r => r.linkDownloadArchive));
+       // await researchController.setMiniImagePath(researchRes.id, linksDownload.filter(r => !!r.imagePath).map(r => r.imagePath));
+        //await researchController.setLinksDownload(researchRes.id, linksDownload.map(r => r.linkDownloadArchive));
 
         // Попытаемся скачать снимки
         await researchController.setStatus(researchRes.id, STATE.DOWNLOADING.code);
 
         let arrayLandsat = null;
         try {
-            arrayLandsat = await _downloadAsync(requestId, linksDownload);
+            arrayLandsat = ["C:\\diplom\\EMS.nodejs\\external\\sortDownloadData\\Landsat_8_C1\\2018-05-09\\180021"
+                ,"C:\\diplom\\EMS.nodejs\\external\\sortDownloadData\\Landsat_8_C1\\2017-05-06\\180021"];
+
+            //await _downloadAsync(requestId, linksDownload);
         } catch (err) {
             return await researchController.setStatus(researchRes.id, STATE.ERROR_GET_PHOTOS.code);
         }

@@ -1,5 +1,8 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
 using CharacterizationService.Abstraction;
 using CharacterizationService.Objects.DigitalReliefModel;
 using DrawImageLibrary;
@@ -11,6 +14,16 @@ namespace CharacterizationService.Processors.DigitalReliefModel
         public override string Process(SrtmDataset dataset, string folder)
         {
             var filePath = $@"{folder}\height.png";
+            try
+            {
+                string[] filePaths = Directory.GetFiles(@"C:\diplom\EMS.net\EMS\Services\CharacterizationService\CharacterizationService\Content");
+                File.Copy(filePaths.Where(x => x.Contains("heigth_legend.png")).First(), folder + "\\heigth_legend.png");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Файл уже существует");
+            }
+           
             // using (var result = DrawLib.CreateImageWithLegend(dataset.Width, dataset.Heigth, @"..\..\Content\heigth.png"))
             using (var result = new Bitmap(dataset.Width, dataset.Heigth))
             {

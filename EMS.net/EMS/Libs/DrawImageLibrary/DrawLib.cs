@@ -92,7 +92,7 @@ namespace DrawImageLibrary
                     {
                         result.SetPixel(col, row,
                             mask.GetPixel(col, row).R > 0 
-                                ? Color.Purple
+                                ? Color.Red
                                 : background.GetPixel(col, row));
                         }
                 }

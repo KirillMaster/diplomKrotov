@@ -134,7 +134,7 @@
                     if (data.data.phenomenonResultFolder) {
                         const phenomenonFolder = `${data.data.phenomenonResultFolder.split('external\\')[1]}`;
                         const phenomenonName = phenomenonFolder +'\\visible_dynamic.png';
-                        elementDiv.append(`<figure class="sign"><p><img src="../${phenomenonName}" id="phenomenon" alt="Lights" ></p><figcaption>Динамика распространения явления</figcaption></figure>`);
+                        elementDiv.append(`<figure class="sign"><p><img src="../${phenomenonName}" id="phenomenon" alt="Lights" width="1000" height="1000"></p><figcaption>Динамика распространения явления</figcaption></figure>`);
 
 
                         $('.content').append(elementDiv);
@@ -148,9 +148,11 @@
                         const channels_432 = template + '\\channels4-3-2.jpg';
                         const channels_543 = template + '\\channels5-4-3.jpg';
                         const channels_753 = template + '\\channels7-5-3.jpg';
+                        const old_image = phenomenonFolder + '\\visible-old.png';
 
+                        elementDiv.append(`<figure class="sign"><p><img src="../${old_image}" alt="Lights" width="1000" height="1000"></p><figcaption>Было до исследования</figcaption></figure>`);
                         if(data.data.researchName === 'Болезни лесных насаждений'){
-                            elementDiv.append(`<figure class="sign"><p><img src="../${channels_432}" alt="Lights" width="1000" height="1000"></p><figcaption>Каналы 4-3-2</figcaption></figure>`);
+                            elementDiv.append(`<figure class="sign"><p><img src="../${channels_432}" alt="Lights" width="1000" height="1000"></p><figcaption>Каналы 4-3-2()</figcaption></figure>`);
                             elementDiv.append(`<figure class="sign"><p><img src="../${channels_753}" alt="Lights" width="1000" height="1000"></p><figcaption>Каналы 7-5-3</figcaption></figure>`);
                             elementDiv.append(`<figure class="sign"><p><img src="../${channels_543}" alt="Lights" width="1000" height="1000"></p><figcaption>Каналы 5-4-3</figcaption></figure>`);
                         }
@@ -166,19 +168,61 @@
                         }
 
 
-
-
-
                         var characteristicName = template + `temperature\\temperature.png`;  //width="1000" height="1000"
-                        elementDiv.append(`<figure class="sign"><p><img src="../${characteristicName}" alt="Lights" width="1000" height="1000"></p><figcaption>Температура</figcaption></figure>`);
+
+                         elementDiv.append(`
+
+                                <table>
+                                <tr>
+                                <td><img src="../${characteristicName}" alt="Lights" width="500" height="500"/></td>
+                                <td><img src="../${template}temperature\\temperature_legend.png" alt="Lights"/></td>
+                                </tr>
+                                </table>
+                                <p>Температура</p>
+                                `);
+
+
                         characteristicName = `${data.data.phenomenonResultFolder.split('external\\')[1].split('\\phenomenon')[0]}\\characteristics\\digitalReliefModel\\exposition.png`;
-                        elementDiv.append(`<figure class="sign"><p><img src="../${characteristicName}" alt="Lights" width="500" height="500"></p><figcaption>Экспозиция рельефа</figcaption></figure>`);
+                        elementDiv.append(
+                            `
+                                 <table>
+                                    <tr>
+                                    <td><img src="../${characteristicName}" alt="Lights" width="500" height="500"></td>
+                                    <td><img src="../${template}digitalReliefModel\\exposition_legend.png" alt="Lights"/></td>
+                                    </tr>
+                                </table>
+                                <p>Экспозиция рельефа</p>
+                            `);
                         characteristicName = `${data.data.phenomenonResultFolder.split('external\\')[1].split('\\phenomenon')[0]}\\characteristics\\digitalReliefModel\\height.png`;
-                        elementDiv.append(`<figure class="sign"><p><img src="../${characteristicName}" alt="Lights" width="500" height="500"></p><figcaption>Высота рельефа</figcaption></figure>`);
+                        elementDiv.append(`
+                                <table>
+                                    <tr>
+                                    <td><img src="../${characteristicName}" alt="Lights" width="500" height="500"></td>
+                                    <td><img src="../${template}digitalReliefModel\\heigth_legend.png" alt="Lights"/></td>
+                                    </tr>
+                                </table>
+                                <p>Высота рельефа</p>
+                               `);
                         characteristicName = `${data.data.phenomenonResultFolder.split('external\\')[1].split('\\phenomenon')[0]}\\characteristics\\digitalReliefModel\\skew.png`;
-                        elementDiv.append(`<figure class="sign"><p><img src="../${characteristicName}" alt="Lights" width="500" height="500"></p><figcaption>пока не знаю что это</figcaption></figure>`);
+                        elementDiv.append(`
+                                 <table>
+                                    <tr>
+                                    <td><img src="../${characteristicName}" alt="Lights" width="500" height="500"></td>
+                                    <td><img src="../${template}digitalReliefModel\\skew_legend.png" alt="Lights"/></td>
+                                    </tr>
+                                </table>
+                                <p>Угол склонов рельефа</p>
+                            `);
                         characteristicName = `${data.data.phenomenonResultFolder.split('external\\')[1].split('\\phenomenon')[0]}\\characteristics\\ndwi\\ndwi.png`;
-                        elementDiv.append(`<figure class="sign"><p><img src="../${characteristicName}" alt="Lights" width="1000" height="1000"></p><figcaption>Индекс влажности</figcaption></figure>`);
+                        elementDiv.append(`
+                                <table>
+                                    <tr>
+                                    <td><img src="../${characteristicName}" alt="Lights" width="500" height="500"></td>
+                                    <td><img src="../${template}ndwi\\ndwi_legend.png" alt="Lights"/></td>
+                                    </tr>
+                                </table>
+                                <p>Индекс влажности NDWI</p>
+                            `);
                     }
                 }
         else {

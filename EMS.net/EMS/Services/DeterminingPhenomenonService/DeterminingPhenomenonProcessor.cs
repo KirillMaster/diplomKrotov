@@ -187,11 +187,11 @@ namespace DeterminingPhenomenonService
 
             int amountDynamicPoints = dymanicMask.Count(p => p > 0);
 
-            if (amountDynamicPoints < 30)
-            {
-                _logger.Info($"Сервис обнаружения явления. Статус: динамика измнений обнаружена, но имеет очень слабое воздействие на выбранную область.");
-                return false;
-            }
+            //if (amountDynamicPoints < 30)
+            //{
+            //    _logger.Info($"Сервис обнаружения явления. Статус: динамика измнений обнаружена, но имеет очень слабое воздействие на выбранную область.");
+            //    return false;
+            //}
 
             _logger.Info($"Сервис обнаружения явления. Статус: отрисовка результатов динамики.");
             DrawDynamicResult(dymanicMask, width, heigth);
@@ -241,6 +241,18 @@ namespace DeterminingPhenomenonService
         private void DrawDynamicResult(byte[] bytes, int width, int height)
         {
             var currentFolder = _dataFolders.Last();
+
+            //ДО того, что было
+            var oldImageFolder = _dataFolders.First();
+            var oldDescription = new LandsatDataDescription(oldImageFolder);
+            CuttedImageInfo oldCuttedImageInfo = ClipImageHelper.GetCuttedImageInfoByPolygon(oldDescription.Channel4.Raw, _polygon);
+            DrawLib.DrawNaturalColor(oldDescription.Channel4.Normalized
+                       , oldDescription.Channel3.Normalized
+                       , oldDescription.Channel2.Normalized,
+                     oldCuttedImageInfo, _pathToVisibleImage + "-old.png");
+
+
+
             var landsatDescription = new LandsatDataDescription(currentFolder);
 
             CuttedImageInfo cuttedImageInfo = ClipImageHelper.GetCuttedImageInfoByPolygon(landsatDescription.Channel4.Raw, _polygon);
